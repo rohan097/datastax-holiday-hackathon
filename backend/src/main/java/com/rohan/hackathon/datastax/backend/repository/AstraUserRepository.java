@@ -1,16 +1,29 @@
 package com.rohan.hackathon.datastax.backend.repository;
 
+import com.datastax.oss.driver.api.core.CqlIdentifier;
+import com.datastax.oss.driver.api.core.CqlSession;
 import com.rohan.hackathon.datastax.backend.model.User;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AstraUserRepository implements UserRepository {
 
-    @Override
-    public User findByEmail(String userName) {
-        User user = new User();
-        user.setEmail("test@g.com");
-        user.setPassword("$2a$10$T4gnV1dlbkDGGnWZHia1Ve42VZekfpfQ83pxFlzL3Jw5YdC9whbhu");
-        return user;
+    private final UserDao userDao;
+
+    public AstraUserRepository(final CqlSession cqlSession) {
+        UserMapper userMapper = new UserMapperBuilder(cqlSession).build();
+        this.userDao = userMapper.userDao(CqlIdentifier.fromCql("application"));
     }
+
+    @Override
+    public User findByEmail(String email) {
+        return userDao.findByEmail(email);
+    }
+
+    @Override
+    public Boolean save(User user) {
+        return userDao.save(user);
+    }
+
+
 }

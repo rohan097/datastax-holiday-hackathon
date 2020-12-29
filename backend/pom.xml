@@ -16,6 +16,8 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <jsonwebtoken.version>0.9.1</jsonwebtoken.version>
+        <datastax-driver.version>4.9.0</datastax-driver.version>
     </properties>
 
     <dependencies>
@@ -30,7 +32,26 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
+            <version>${jsonwebtoken.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.datastax.oss</groupId>
+            <artifactId>java-driver-core</artifactId>
+            <version>${datastax-driver.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.datastax.oss</groupId>
+            <artifactId>java-driver-query-builder</artifactId>
+            <version>${datastax-driver.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.datastax.oss</groupId>
+            <artifactId>java-driver-mapper-runtime</artifactId>
+            <version>${datastax-driver.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-cassandra</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -44,6 +65,28 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source> <!-- (or higher) -->
+                    <target>1.8</target> <!-- (or higher) -->
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>com.datastax.oss</groupId>
+                            <artifactId>java-driver-mapper-processor</artifactId>
+                            <version>${datastax-driver.version}</version>
+                        </path>
+                        <!-- Optional: add this if you want to avoid the SLF4J warning "Failed to load class
+                          StaticLoggerBinder, defaulting to no-operation implementation" when compiling. -->
+                        <path>
+                            <groupId>org.slf4j</groupId>
+                            <artifactId>slf4j-nop</artifactId>
+                            <version>1.7.26</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
         </plugins>
     </build>

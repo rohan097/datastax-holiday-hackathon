@@ -6,4 +6,5 @@ public interface UserRepository {
 
     User findByEmail(String userName);
 
+    Boolean save(User user);
 }

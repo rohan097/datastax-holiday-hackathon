@@ -1,17 +1,24 @@
 package com.rohan.hackathon.datastax.backend.model;
 
-import java.time.LocalDateTime;
+import com.datastax.oss.driver.api.mapper.annotations.CqlName;
+import com.datastax.oss.driver.api.mapper.annotations.Entity;
+import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
+
+import java.time.Instant;
 import java.util.UUID;
 
+@Entity
+@CqlName("users")
 public class User {
 
-    private UUID userId;
+    private UUID userId = UUID.randomUUID();
+    @PartitionKey
     private String email;
     private String firstName;
     private String lastName;
     private String password;
-    private LocalDateTime createdAt;
-    private LocalDateTime lastChangedAt;
+    private Instant createdAt = Instant.now();
+    private Instant lastChangedAt = Instant.now();
 
     public UUID getUserId() {
         return userId;
@@ -53,19 +60,32 @@ public class User {
         this.password = password;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getLastChangedAt() {
+    public Instant getLastChangedAt() {
         return lastChangedAt;
     }
 
-    public void setLastChangedAt(LocalDateTime lastChangedAt) {
+    public void setLastChangedAt(Instant lastChangedAt) {
         this.lastChangedAt = lastChangedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", password='" + password + '\'' +
+                ", createdAt=" + createdAt +
+                ", lastChangedAt=" + lastChangedAt +
+                '}';
     }
 }
