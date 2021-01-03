@@ -1,20 +1,8 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Divider, Grid,
-    Icon,
-    IconButton, TextField
-} from "@material-ui/core";
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField} from "@material-ui/core";
 import {withStyles} from "@material-ui/styles";
-import {
-    Formik, Form, Field, ErrorMessage,
-} from 'formik';
+import {Formik,} from 'formik';
 import * as Yup from 'yup';
 
 const styles = theme => ({

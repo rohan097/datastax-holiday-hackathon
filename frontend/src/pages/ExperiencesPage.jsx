@@ -9,7 +9,6 @@ import {
     Divider,
     Grid,
     Paper,
-    TextField,
     Typography
 } from "@material-ui/core";
 import SearchBar from "../components/SearchBar";
@@ -18,6 +17,10 @@ import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/styles";
 
 const styles = theme => ({
+    rootContainer: {
+        display: 'flex',
+        paddingTop: 32
+    },
     tagContainer: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -88,8 +91,9 @@ class ExperiencesPage extends Component {
     }
 
     render() {
+        const {classes} = this.props;
         return (
-            <Container>
+            <Container className={classes.rootContainer}>
                 <Paper>
                     <Grid container>
                         <Grid item md={12} lg={12}>

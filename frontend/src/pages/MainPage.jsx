@@ -1,9 +1,10 @@
 import React, {Component} from "react";
 
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import ExperiencesPage from "../pages/ExperiencesPage";
-import HomePage from "../pages/HomePage";
-import {Container} from "@material-ui/core";
+import ExperiencesPage from "./ExperiencesPage";
+import HomePage from "./HomePage";
+import {ExperiencesRoute, SignUpRoute} from "../utils/Routes";
+import SignUpPage from "./SignUpPage";
 
 class MainPage extends Component {
     render() {
@@ -11,7 +12,8 @@ class MainPage extends Component {
             <Router>
                 <Switch>
                     <Route path="/" exact component={HomePage}/>
-                    <Route path="/experiences" component={ExperiencesPage}/>
+                    <Route path={ExperiencesRoute.path} component={ExperiencesPage}/>
+                    <Route path={SignUpRoute.path} component={SignUpPage}/>
                 </Switch>
             </Router>
         );

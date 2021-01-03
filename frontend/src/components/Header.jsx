@@ -1,23 +1,26 @@
+import * as React from "react";
 import {Component} from "react";
 import HideOnScroll from "./HideOnScroll";
 import {
     AppBar,
-    Button,
+    Avatar,
     Container,
     Fab,
     Hidden,
     IconButton,
     List,
     ListItem,
-    ListItemText, Menu, MenuItem,
+    ListItemText,
+    Menu,
+    MenuItem,
     Toolbar
 } from "@material-ui/core";
-import {Home, KeyboardArrowUp} from "@material-ui/icons";
+import {Home, KeyboardArrowUp, Person} from "@material-ui/icons";
 import SideDrawer from "./SideDrawer";
 import BackToTop from "./BackToTop";
-import * as React from "react";
 import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/styles";
+import {ExperiencesRoute, HomeRoute, LoginRoute, ResourceRoute, SignUpRoute} from "../utils/Routes";
 
 const styles = theme => ({
     navbarDisplayFlex: {
@@ -36,10 +39,9 @@ const styles = theme => ({
 });
 
 const navLinks = [
-    { title: `Home`, path: `/` },
-    { title: `Experiences`, path: `/experiences` },
-    { title: `Resources`, path: `/blog` },
-    { title: `Login`, path: `/login` },
+    HomeRoute,
+    ExperiencesRoute,
+    ResourceRoute
 ];
 
 class Header extends Component {
@@ -87,16 +89,16 @@ class Header extends Component {
                                         aria-labelledby="main navigation"
                                         className={classes.navListDisplayFlex}
                                     >
-                                        {navLinks.map(({ title, path }) => (
+                                        {navLinks.map(({title, path}) => (
                                             <a href={path} key={title} className={classes.linkText}>
                                                 <ListItem button>
-                                                    <ListItemText primary={title} />
+                                                    <ListItemText primary={title}/>
                                                 </ListItem>
                                             </a>
                                         ))}
-                                        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick}>
-                                            Open Menu
-                                        </Button>
+                                        <Avatar onClick={this.handleClick}>
+                                            <Person/>
+                                        </Avatar>
                                         <Menu
                                             id="simple-menu"
                                             elevation={0}
@@ -113,8 +115,12 @@ class Header extends Component {
                                             //     horizontal: 'left'
                                             // }}
                                         >
-                                            <MenuItem onClick={this.handleCloseUserDropDown}>Profile</MenuItem>
-                                            <MenuItem onClick={this.handleCloseUserDropDown}>My account</MenuItem>
+                                            {/* TODO: Need to make this conditional*/}
+                                            <MenuItem component={"a"} href={LoginRoute.path}
+                                                      onClick={this.handleCloseUserDropDown}>Login</MenuItem>
+                                            <MenuItem component={"a"} href={SignUpRoute.path}
+                                                      onClick={this.handleCloseUserDropDown}>Sign Up</MenuItem>
+                                            <MenuItem onClick={this.handleCloseUserDropDown}>My Profile</MenuItem>
                                             <MenuItem onClick={this.handleCloseUserDropDown}>Logout</MenuItem>
                                         </Menu>
                                     </List>
