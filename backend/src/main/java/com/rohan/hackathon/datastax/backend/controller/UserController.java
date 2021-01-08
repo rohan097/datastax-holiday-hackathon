@@ -22,7 +22,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/user/create")
+    @PostMapping(value = "/user/signup")
     public ResponseEntity<Object> createUser(@RequestBody User user) {
         logger.info("Received request to signup user: {}", user);
         if (userService.createNewUser(user)) {

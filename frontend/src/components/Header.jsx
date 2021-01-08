@@ -21,6 +21,7 @@ import BackToTop from "./BackToTop";
 import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/styles";
 import {ExperiencesRoute, HomeRoute, LoginRoute, ResourceRoute, SignUpRoute} from "../utils/Routes";
+import AuthenticationService from "../services/AuthenticationService";
 
 const styles = theme => ({
     navbarDisplayFlex: {
@@ -121,7 +122,10 @@ class Header extends Component {
                                             <MenuItem component={"a"} href={SignUpRoute.path}
                                                       onClick={this.handleCloseUserDropDown}>Sign Up</MenuItem>
                                             <MenuItem onClick={this.handleCloseUserDropDown}>My Profile</MenuItem>
-                                            <MenuItem onClick={this.handleCloseUserDropDown}>Logout</MenuItem>
+                                            <MenuItem component={"a"} href={LoginRoute.path} onClick={(e) => {
+                                                AuthenticationService.logout();
+                                                this.handleCloseUserDropDown(e);
+                                            }}>Logout</MenuItem>
                                         </Menu>
                                     </List>
                                 </Hidden>

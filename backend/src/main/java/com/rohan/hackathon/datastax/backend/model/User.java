@@ -14,9 +14,8 @@ public class User {
     private UUID userId = UUID.randomUUID();
     @PartitionKey
     private String email;
-    private String firstName;
-    private String lastName;
     private String password;
+    private String gender;
     private Instant createdAt = Instant.now();
     private Instant lastChangedAt = Instant.now();
 
@@ -36,28 +35,20 @@ public class User {
         this.email = email;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public Instant getCreatedAt() {
@@ -81,9 +72,8 @@ public class User {
         return "User{" +
                 "userId=" + userId +
                 ", email='" + email + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
+                ", gender='" + gender + '\'' +
                 ", createdAt=" + createdAt +
                 ", lastChangedAt=" + lastChangedAt +
                 '}';

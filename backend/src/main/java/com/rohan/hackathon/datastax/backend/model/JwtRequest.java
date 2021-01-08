@@ -1,11 +1,13 @@
 package com.rohan.hackathon.datastax.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+
 import java.io.Serializable;
 
 public class JwtRequest implements Serializable {
 
     private static final long serialVersionUID = 5926468583005150707L;
-
+    @JsonAlias("email")
     private String username;
     private String password;
 
@@ -32,5 +34,13 @@ public class JwtRequest implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "JwtRequest{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

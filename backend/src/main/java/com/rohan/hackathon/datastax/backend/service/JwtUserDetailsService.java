@@ -25,7 +25,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
-        return new JwtUserDetails(user.getUserId(), user.getFirstName(), user.getEmail(), user.getPassword());
+        return new JwtUserDetails(user.getUserId(), user.getEmail(), user.getPassword());
     }
 
 //    public UserDetailEntity updateUser(String username, String password) {

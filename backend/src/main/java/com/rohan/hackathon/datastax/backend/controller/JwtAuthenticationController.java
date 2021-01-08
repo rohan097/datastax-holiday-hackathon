@@ -33,14 +33,14 @@ public class JwtAuthenticationController {
         this.jwtUserDetailsService = jwtUserDetailsService;
     }
 
-    @PostMapping(value = "/user/authenticate")
+    @PostMapping(value = "/user/login")
     public ResponseEntity<JwtResponse> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-        logger.info("password = {}", authenticationRequest.getPassword());
+        logger.info("Received request to login: {}", authenticationRequest);
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
         final UserDetails userDetails = jwtUserDetailsService
                 .loadUserByUsername(authenticationRequest.getUsername());
-
+        logger.info("Found user = {}.", userDetails);
         final String token = jwtTokenUtil.generateToken(userDetails);
 
         return ResponseEntity.ok(new JwtResponse(token));
@@ -50,8 +50,10 @@ public class JwtAuthenticationController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
+            logger.info("User is disabled: {}", e.getMessage());
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
+            logger.info("Bad credentials: {}", e.getMessage());
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }
