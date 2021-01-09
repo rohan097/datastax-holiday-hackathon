@@ -40,14 +40,11 @@ class AuthenticationService {
     // }
     //
     registerSuccessfulLoginForJwt(username, token) {
-        console.log(username);
         let tokenDetails = jwtDecode(token);
         myHour.setHours(myHour.getHours() + 1); //one hour from now
         localStorage.setItem('storedData', myHour);
-        console.log("token----", tokenDetails);
         localStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username);
         localStorage.setItem(USER_TOKEN, this.createJWTToken(token));
-        // localStorage.setItem("name", tokenDetails.details.name);
         this.setupAxiosInterceptors();
     }
 

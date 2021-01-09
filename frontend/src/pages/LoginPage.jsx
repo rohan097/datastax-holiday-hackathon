@@ -6,7 +6,6 @@ import {Formik,} from 'formik';
 import * as Yup from 'yup';
 import axios from "axios";
 import Alert from "@material-ui/lab/Alert";
-import {AlertTitle} from "@material-ui/lab";
 import Snackbar from "@material-ui/core/Snackbar";
 import {LOGIN} from "../utils/Enpoints";
 import AuthenticationService from "../services/AuthenticationService";
@@ -24,6 +23,18 @@ class LoginPage extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            showErrorMessage: false,
+            errorMessage: ""
+        };
+        this.handleClose = this.handleClose.bind(this);
+    }
+
+    handleClose() {
+        this.setState({
+            showErrorMessage: false,
+            errorMessage: "",
+        });
     }
 
 
@@ -51,15 +62,16 @@ class LoginPage extends Component {
                                     },
                                 })
                                 .then((response) => {
-                                    console.log("Response = ");
-                                    console.log(response);
+                                    console.log("Successfully logged in.")
                                     setSubmitting(false);
                                     AuthenticationService.registerSuccessfulLoginForJwt(values.email, response.data.token);
                                     this.props.history.push(HomeRoute.path);
                                 })
                                 .catch((error) => {
-                                    console.log(error);
-                                    console.log(error.config);
+                                    this.setState({
+                                        showErrorMessage: true,
+                                        errorMessage: error.response.data
+                                    });
                                 })
                                 .finally(() => {
                                     setSubmitting(false);
@@ -132,10 +144,13 @@ class LoginPage extends Component {
                         }}
                     </Formik>
                 </Grid>
-                <Snackbar open={true}>
-                    <Alert severity="error" hidden={true}>
-                        <AlertTitle>Error</AlertTitle>
-                        This is an error alert — <strong>check it out!</strong>
+                <Snackbar
+                    open={this.state.showErrorMessage}
+                    autoHideDuration={5000}
+                    onClose={this.handleClose}
+                >
+                    <Alert severity="error" onClose={this.handleClose}>
+                        {this.state.errorMessage}
                     </Alert>
                 </Snackbar>
             </Container>

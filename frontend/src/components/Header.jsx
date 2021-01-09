@@ -79,8 +79,8 @@ class Header extends Component {
                         <Toolbar component="nav">
                             <Container maxWidth="md" className={classes.navbarDisplayFlex}>
                                 <IconButton edge="start" aria-label="home">
-                                    <a href="/" style={{ color: `white` }}>
-                                        <Home fontSize="large" />
+                                    <a href="/" style={{color: `white`}}>
+                                        <Home fontSize="large"/>
                                     </a>
                                 </IconButton>
 
@@ -117,30 +117,38 @@ class Header extends Component {
                                             // }}
                                         >
                                             {/* TODO: Need to make this conditional*/}
-                                            <MenuItem component={"a"} href={LoginRoute.path}
-                                                      onClick={this.handleCloseUserDropDown}>Login</MenuItem>
-                                            <MenuItem component={"a"} href={SignUpRoute.path}
-                                                      onClick={this.handleCloseUserDropDown}>Sign Up</MenuItem>
-                                            <MenuItem onClick={this.handleCloseUserDropDown}>My Profile</MenuItem>
-                                            <MenuItem component={"a"} href={LoginRoute.path} onClick={(e) => {
-                                                AuthenticationService.logout();
-                                                this.handleCloseUserDropDown(e);
-                                            }}>Logout</MenuItem>
+                                            {!AuthenticationService.isUserLoggedIn() &&
+                                            <>
+                                                <MenuItem component={"a"} href={LoginRoute.path}
+                                                          onClick={this.handleCloseUserDropDown}>Login</MenuItem>
+                                                <MenuItem component={"a"} href={SignUpRoute.path}
+                                                          onClick={this.handleCloseUserDropDown}>Sign Up</MenuItem>
+                                            </>
+                                            }
+                                            {AuthenticationService.isUserLoggedIn() &&
+                                            <>
+                                                <MenuItem onClick={this.handleCloseUserDropDown}>My Profile</MenuItem>
+                                                <MenuItem component={"a"} href={LoginRoute.path} onClick={(e) => {
+                                                    AuthenticationService.logout();
+                                                    this.handleCloseUserDropDown(e);
+                                                }}>Logout</MenuItem>
+                                            </>
+                                            }
                                         </Menu>
                                     </List>
                                 </Hidden>
                                 <Hidden mdUp>
-                                    <SideDrawer navLinks={navLinks} />
+                                    <SideDrawer navLinks={navLinks}/>
                                 </Hidden>
                             </Container>
                         </Toolbar>
                     </AppBar>
 
                 </HideOnScroll>
-                <Toolbar id="back-to-top-anchor" />
+                <Toolbar id="back-to-top-anchor"/>
                 <BackToTop>
                     <Fab color="secondary" size="large" aria-label="scroll back to top">
-                        <KeyboardArrowUp />
+                        <KeyboardArrowUp/>
                     </Fab>
                 </BackToTop>
             </>
