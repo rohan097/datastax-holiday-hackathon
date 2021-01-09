@@ -4,6 +4,10 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextFie
 import {withStyles} from "@material-ui/styles";
 import {Formik,} from 'formik';
 import * as Yup from 'yup';
+import axios from "axios";
+import {ADD_EXPERIENCE} from "../../utils/Enpoints";
+import AuthenticationService from "../../services/AuthenticationService";
+import {HomeRoute} from "../../utils/Routes";
 
 const styles = theme => ({
     root: {
@@ -21,7 +25,6 @@ class ExperienceForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isSubmissionComplete: false,
         };
     }
 
@@ -40,17 +43,35 @@ class ExperienceForm extends Component {
                     <DialogTitle id="form-dialog-title">Share Your Experience</DialogTitle>
                     <DialogContent>
                         <Formik
-                            initialValues={{title: '', tags: '', experience: ''}}
+                            initialValues={{title: '', tags: '', content: ''}}
                             onSubmit={(values, {setSubmitting}) => {
                                 setSubmitting(true);
                                 console.log("Submitting form.");
-                                this.setState({isSubmissionComplete: true});
+                                axios
+                                    .post(ADD_EXPERIENCE, values, {
+                                        headers: {
+                                            "Access-Control-Allow-Origin": "*",
+                                            "Content-Type": "application/json",
+                                        },
+                                    })
+                                    .then((response) => {
+                                        console.log("Successfully submitted form.")
+                                        setSubmitting(false);
+                                    })
+                                    .catch((error) => {
+                                        this.setState({
+                                            showErrorMessage: true,
+                                            errorMessage: error.response.data
+                                        });
+                                    })
+                                    .finally(() => {
+                                        setSubmitting(false);
+                                    });
                             }}
-
                             validationSchema={Yup.object().shape({
                                 title: Yup.string()
                                     .required('Required'),
-                                experience: Yup.string()
+                                content: Yup.string()
                                     .required('Required'),
                             })}
                         >
@@ -86,12 +107,12 @@ class ExperienceForm extends Component {
                                             <Grid item lg={12} md={12} sm={12} xs={12}>
                                                 <TextField
                                                     label="Experience"
-                                                    name="experience"
-                                                    value={values.experience}
+                                                    name="content"
+                                                    value={values.content}
                                                     onChange={handleChange}
                                                     onBlur={handleBlur}
-                                                    helperText={(errors.experience && touched.experience) && errors.experience}
-                                                    error={errors.experience && touched.experience}
+                                                    helperText={(errors.content && touched.content) && errors.content}
+                                                    error={errors.content && touched.content}
                                                     margin="normal"
                                                     fullWidth={true}
                                                     multiline={true}

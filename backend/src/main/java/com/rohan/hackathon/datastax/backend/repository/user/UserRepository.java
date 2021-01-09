@@ -1,4 +1,4 @@
-package com.rohan.hackathon.datastax.backend.repository;
+package com.rohan.hackathon.datastax.backend.repository.user;
 
 import com.rohan.hackathon.datastax.backend.model.User;
 

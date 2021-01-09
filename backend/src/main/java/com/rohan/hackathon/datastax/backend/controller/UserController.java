@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/user")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -24,7 +25,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/user/signup")
+    @PostMapping(value = "/signup")
     public ResponseEntity<Object> createUser(@RequestBody User user) {
         logger.info("Received request to signup user: {}", user);
         if (userService.createNewUser(user)) {
@@ -34,7 +35,7 @@ public class UserController {
         }
     }
 
-    @PostMapping(value = "/user/login")
+    @PostMapping(value = "/login")
     public ResponseEntity<JwtResponse> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         logger.info("Received request to login: {}", authenticationRequest);
         String token = this.userService.login(authenticationRequest);

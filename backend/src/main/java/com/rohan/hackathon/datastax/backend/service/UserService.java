@@ -4,14 +4,11 @@ import com.rohan.hackathon.datastax.backend.exception.AuthenticationException;
 import com.rohan.hackathon.datastax.backend.exception.LoginException;
 import com.rohan.hackathon.datastax.backend.model.JwtRequest;
 import com.rohan.hackathon.datastax.backend.model.User;
-import com.rohan.hackathon.datastax.backend.repository.UserRepository;
+import com.rohan.hackathon.datastax.backend.repository.user.UserRepository;
 import com.rohan.hackathon.datastax.backend.util.JwtTokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,7 +46,7 @@ public class UserService {
     private void authenticate(String username, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException | BadCredentialsException e) {
+        } catch (DisabledException | LockedException | BadCredentialsException e) {
             logger.error("Invalid credentials received: {}", e.getMessage());
             throw new AuthenticationException(e.getMessage(), e);
         } catch (Exception e) {

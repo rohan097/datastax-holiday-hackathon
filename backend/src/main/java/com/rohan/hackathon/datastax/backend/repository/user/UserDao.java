@@ -1,4 +1,4 @@
-package com.rohan.hackathon.datastax.backend.repository;
+package com.rohan.hackathon.datastax.backend.repository.user;
 
 import com.datastax.oss.driver.api.mapper.annotations.Dao;
 import com.datastax.oss.driver.api.mapper.annotations.Insert;

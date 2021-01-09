@@ -2,7 +2,7 @@ package com.rohan.hackathon.datastax.backend.service;
 
 import com.rohan.hackathon.datastax.backend.model.JwtUserDetails;
 import com.rohan.hackathon.datastax.backend.model.User;
-import com.rohan.hackathon.datastax.backend.repository.UserRepository;
+import com.rohan.hackathon.datastax.backend.repository.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class JwtUserDetailsService implements UserDetailsService {
 
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public JwtUserDetailsService(final UserRepository userRepository) {
         this.userRepository = userRepository;
