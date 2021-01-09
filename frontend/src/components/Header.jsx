@@ -106,6 +106,7 @@ class Header extends Component {
                                             anchorEl={this.state.anchorEl}
                                             keepMounted
                                             open={Boolean(this.state.anchorEl)}
+                                            getContentAnchorEl={null}
                                             onClose={this.handleCloseUserDropDown}
                                             anchorOrigin={{
                                                 vertical: 'center',
@@ -118,21 +119,22 @@ class Header extends Component {
                                         >
                                             {/* TODO: Need to make this conditional*/}
                                             {!AuthenticationService.isUserLoggedIn() &&
-                                            <>
+                                            [
                                                 <MenuItem component={"a"} href={LoginRoute.path}
-                                                          onClick={this.handleCloseUserDropDown}>Login</MenuItem>
+                                                          onClick={this.handleCloseUserDropDown}>Login</MenuItem>,
                                                 <MenuItem component={"a"} href={SignUpRoute.path}
                                                           onClick={this.handleCloseUserDropDown}>Sign Up</MenuItem>
-                                            </>
+                                            ]
+
                                             }
                                             {AuthenticationService.isUserLoggedIn() &&
-                                            <>
-                                                <MenuItem onClick={this.handleCloseUserDropDown}>My Profile</MenuItem>
+                                            [
+                                                <MenuItem onClick={this.handleCloseUserDropDown}>My Profile</MenuItem>,
                                                 <MenuItem component={"a"} href={LoginRoute.path} onClick={(e) => {
                                                     AuthenticationService.logout();
                                                     this.handleCloseUserDropDown(e);
                                                 }}>Logout</MenuItem>
-                                            </>
+                                            ]
                                             }
                                         </Menu>
                                     </List>
@@ -143,7 +145,6 @@ class Header extends Component {
                             </Container>
                         </Toolbar>
                     </AppBar>
-
                 </HideOnScroll>
                 <Toolbar id="back-to-top-anchor"/>
                 <BackToTop>
