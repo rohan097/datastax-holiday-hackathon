@@ -1,4 +1,3 @@
-import axios from "axios";
 import jwtDecode from "jwt-decode";
 // import {AUTHENTICATE, BASIC_AUTH, FORGOT_PASSWORD} from "../utils/Enpoints";
 
@@ -40,12 +39,12 @@ class AuthenticationService {
     // }
     //
     registerSuccessfulLoginForJwt(username, token) {
+        console.log("Registering successful login.")
         let tokenDetails = jwtDecode(token);
         myHour.setHours(myHour.getHours() + 1); //one hour from now
         localStorage.setItem('storedData', myHour);
         localStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username);
         localStorage.setItem(USER_TOKEN, this.createJWTToken(token));
-        this.setupAxiosInterceptors();
     }
 
     createJWTToken(token) {
@@ -72,14 +71,6 @@ class AuthenticationService {
     //     return user;
     // }
     //
-    setupAxiosInterceptors() {
-        axios.interceptors.request.use((config) => {
-            if (this.isUserLoggedIn()) {
-                config.headers.authorization = localStorage.getItem(USER_TOKEN);
-            }
-            return config;
-        });
-    }
 
     //
     //

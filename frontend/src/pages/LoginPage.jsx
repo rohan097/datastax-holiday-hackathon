@@ -57,7 +57,7 @@ class LoginPage extends Component {
                             axios
                                 .post(LOGIN, values, {
                                     headers: {
-                                        "Access-Control-Allow-Origin": "*",
+                                        // "Access-Control-Allow-Origin": "*",
                                         "Content-Type": "application/json",
                                     },
                                 })

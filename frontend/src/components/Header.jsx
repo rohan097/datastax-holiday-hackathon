@@ -20,7 +20,7 @@ import SideDrawer from "./SideDrawer";
 import BackToTop from "./BackToTop";
 import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/styles";
-import {ExperiencesRoute, HomeRoute, LoginRoute, ResourceRoute, SignUpRoute} from "../utils/Routes";
+import {HomeRoute, LoginRoute, PostsRoute, ResourceRoute, SignUpRoute} from "../utils/Routes";
 import AuthenticationService from "../services/AuthenticationService";
 
 const styles = theme => ({
@@ -41,7 +41,7 @@ const styles = theme => ({
 
 const navLinks = [
     HomeRoute,
-    ExperiencesRoute,
+    PostsRoute,
     ResourceRoute
 ];
 

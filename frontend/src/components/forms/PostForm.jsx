@@ -4,10 +4,8 @@ import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextFie
 import {withStyles} from "@material-ui/styles";
 import {Formik,} from 'formik';
 import * as Yup from 'yup';
-import axios from "axios";
-import {ADD_EXPERIENCE} from "../../utils/Enpoints";
-import AuthenticationService from "../../services/AuthenticationService";
-import {HomeRoute} from "../../utils/Routes";
+import {ADD_POST} from "../../utils/Enpoints";
+import AxiosClient from "../../utils/AxiosClient";
 
 const styles = theme => ({
     root: {
@@ -20,12 +18,22 @@ const styles = theme => ({
     },
 });
 
-class ExperienceForm extends Component {
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+
+class PostForm extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-        };
+        this.state = {};
     }
 
 
@@ -47,10 +55,11 @@ class ExperienceForm extends Component {
                             onSubmit={(values, {setSubmitting}) => {
                                 setSubmitting(true);
                                 console.log("Submitting form.");
-                                axios
-                                    .post(ADD_EXPERIENCE, values, {
+                                console.log(values);
+                                AxiosClient
+                                    .post(ADD_POST, values, {
                                         headers: {
-                                            "Access-Control-Allow-Origin": "*",
+                                            // "Access-Control-Allow-Origin": "*",
                                             "Content-Type": "application/json",
                                         },
                                     })
@@ -59,9 +68,12 @@ class ExperienceForm extends Component {
                                         setSubmitting(false);
                                     })
                                     .catch((error) => {
+                                        console.log("Error: ")
+                                        console.log(error)
+                                        console.log(error.config)
                                         this.setState({
                                             showErrorMessage: true,
-                                            errorMessage: error.response.data
+                                            // errorMessage: error.response.data
                                         });
                                     })
                                     .finally(() => {
@@ -145,8 +157,8 @@ class ExperienceForm extends Component {
     }
 }
 
-ExperienceForm.propTypes = {
+PostForm.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ExperienceForm);
+export default withStyles(styles)(PostForm);

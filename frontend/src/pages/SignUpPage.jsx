@@ -48,7 +48,7 @@ class SignUpPage extends Component {
                         </Typography>
                     </Grid>
                     <Formik
-                        initialValues={{email: '', password: '', gender: ''}}
+                        initialValues={{email: '', profileName: '', password: '', gender: ''}}
                         onSubmit={(values, {setSubmitting}) => {
                             setSubmitting(true);
                             console.log("Submitting form to signup with values = ");
@@ -56,7 +56,7 @@ class SignUpPage extends Component {
                             axios
                                 .post(SIGNUP, values, {
                                     headers: {
-                                        "Access-Control-Allow-Origin": "*",
+                                        // "Access-Control-Allow-Origin": "*",
                                         "Content-Type": "application/json",
                                     },
                                 })
@@ -77,6 +77,8 @@ class SignUpPage extends Component {
                         validationSchema={Yup.object().shape({
                             email: Yup.string()
                                 .email()
+                                .required('This cannot be blank.'),
+                            profileName: Yup.string()
                                 .required('This cannot be blank.'),
                             password: Yup.string()
                                 .required('You must give a password.'),
@@ -108,6 +110,19 @@ class SignUpPage extends Component {
                                             onBlur={handleBlur}
                                             helperText={(errors.email && touched.email) && errors.email}
                                             error={errors.email && touched.email}
+                                            margin="normal"
+                                            variant={"outlined"}
+                                        />
+                                    </Grid>
+                                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                                        <TextField
+                                            label="Profile Name"
+                                            name="profileName"
+                                            value={values.profileName}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            helperText={(errors.profileName && touched.profileName) && errors.profileName}
+                                            error={errors.profileName && touched.profileName}
                                             margin="normal"
                                             variant={"outlined"}
                                         />

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Zoom, useScrollTrigger } from "@material-ui/core";
+import {useScrollTrigger, Zoom} from "@material-ui/core";
 
 const style = {
     position: `fixed`,
@@ -8,7 +8,7 @@ const style = {
     zIndex: `99`
 };
 
-const BackToTop = ({ children }) => {
+const BackToTop = ({children}) => {
     const trigger = useScrollTrigger();
 
     const handleClick = event => {
@@ -16,7 +16,7 @@ const BackToTop = ({ children }) => {
             "#back-to-top-anchor"
         );
         if (anchor) {
-            anchor.scrollIntoView({ behavior: "smooth", block: "center" });
+            anchor.scrollIntoView({behavior: "smooth", block: "center"});
         }
     };
 
