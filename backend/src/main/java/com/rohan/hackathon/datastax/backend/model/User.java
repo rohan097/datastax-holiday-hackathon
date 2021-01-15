@@ -14,6 +14,7 @@ public class User {
     private UUID userId = UUID.randomUUID();
     @PartitionKey
     private String email;
+    private String profileName;
     private String password;
     private String gender;
     private Instant createdAt = Instant.now();
@@ -33,6 +34,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getProfileName() {
+        return profileName;
+    }
+
+    public void setProfileName(String profileName) {
+        this.profileName = profileName;
     }
 
     public String getPassword() {
@@ -72,6 +81,7 @@ public class User {
         return "User{" +
                 "userId=" + userId +
                 ", email='" + email + '\'' +
+                ", profileName='" + profileName + '\'' +
                 ", password='" + password + '\'' +
                 ", gender='" + gender + '\'' +
                 ", createdAt=" + createdAt +

@@ -3,13 +3,13 @@ package com.rohan.hackathon.datastax.backend.service;
 import com.rohan.hackathon.datastax.backend.exception.AuthenticationException;
 import com.rohan.hackathon.datastax.backend.exception.LoginException;
 import com.rohan.hackathon.datastax.backend.model.JwtRequest;
+import com.rohan.hackathon.datastax.backend.model.JwtUserDetails;
 import com.rohan.hackathon.datastax.backend.model.User;
 import com.rohan.hackathon.datastax.backend.repository.user.UserRepository;
 import com.rohan.hackathon.datastax.backend.util.JwtTokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.*;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class UserService {
     public String login(JwtRequest authenticationRequest) {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-        final UserDetails userDetails = jwtUserDetailsService
+        final JwtUserDetails userDetails = (JwtUserDetails) jwtUserDetailsService
                 .loadUserByUsername(authenticationRequest.getUsername());
         logger.info("Found user = {}.", userDetails);
         return jwtTokenUtil.generateToken(userDetails);

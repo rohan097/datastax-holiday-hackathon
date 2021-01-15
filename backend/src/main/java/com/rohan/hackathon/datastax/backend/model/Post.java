@@ -2,18 +2,19 @@ package com.rohan.hackathon.datastax.backend.model;
 
 import com.datastax.oss.driver.api.mapper.annotations.CqlName;
 import com.datastax.oss.driver.api.mapper.annotations.Entity;
-import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@CqlName("experiences")
-public class Experience {
+@CqlName("POSTS")
+public class Post {
 
-    @PartitionKey
+    @PrimaryKey
     private UUID userId;
-    private UUID experienceId = UUID.randomUUID();
+    @PrimaryKey
+    private UUID postId = UUID.randomUUID();
     private String title;
     private String content;
     private String tags;
@@ -27,12 +28,12 @@ public class Experience {
         this.userId = userId;
     }
 
-    public UUID getExperienceId() {
-        return experienceId;
+    public UUID getPostId() {
+        return postId;
     }
 
-    public void setExperienceId(UUID experienceId) {
-        this.experienceId = experienceId;
+    public void setPostId(UUID postId) {
+        this.postId = postId;
     }
 
     public String getTitle() {
@@ -69,7 +70,7 @@ public class Experience {
 
     @Override
     public String toString() {
-        return "ExperienceRequest{" +
+        return "Post{" +
                 "title='" + title + '\'' +
                 '}';
     }

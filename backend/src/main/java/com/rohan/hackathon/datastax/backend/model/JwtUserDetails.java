@@ -16,12 +16,14 @@ public class JwtUserDetails implements UserDetails {
 
     private final UUID id;
     private final String username;
+    private final String profileName;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public JwtUserDetails(UUID id,  String username, String password) {
+    public JwtUserDetails(UUID id, String username, String profileName, String password) {
         this.id = id;
         this.username = username;
+        this.profileName = profileName;
         this.password = password;
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
         authorityList.add(new SimpleGrantedAuthority("USER"));
@@ -36,6 +38,10 @@ public class JwtUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public String getProfileName() {
+        return profileName;
     }
 
     @JsonIgnore
