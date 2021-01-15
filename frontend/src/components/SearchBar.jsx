@@ -1,42 +1,40 @@
 import {Component} from "react";
-import {Grid, Icon, IconButton, TextField} from "@material-ui/core";
+import {Button, Grid, Typography} from "@material-ui/core";
+import PropTypes from "prop-types";
+import {withStyles} from "@material-ui/styles";
+import AuthenticationService from "../services/AuthenticationService";
+
+const styles = theme => ({
+    buttonBar: {
+        justifyContent: "center",
+        display: 'flex'
+    }
+});
 
 class SearchBar extends Component {
 
-    constructor(props) {
-        super(props);
-        this.addPost = this.addPost.bind(this);
-    }
-
-    addPost() {
-        console.log("Adding a new post.");
-        this.props.onAddPost();
+    renderButtonBar() {
+        if (AuthenticationService.isUserLoggedIn()) {
+            return (
+                <Button variant={"contained"} onClick={this.props.onAddPost}>
+                    Add Your Story
+                </Button>
+            );
+        } else {
+            return (
+                <Typography variant={"h6"}>
+                    Login or create an account to add your story.
+                </Typography>
+            );
+        }
     }
 
     render() {
+        const {classes} = this.props;
         return (
-            <Grid container direction="row">
-                <Grid item md={8} lg={8}>
-                    <TextField
-                        variant={"outlined"}
-                        fullWidth={true}
-                    />
-                </Grid>
-                <Grid item md={4} lg={4}>
-                    <Grid container>
-                        <Grid item lg={6}>
-                            <IconButton>
-                                <Icon>search</Icon>
-                            </IconButton>
-                        </Grid>
-                        <Grid item lg={6}>
-                            <IconButton onClick={() => {
-                                this.addPost();
-                            }}>
-                                <Icon>add</Icon>
-                            </IconButton>
-                        </Grid>
-                    </Grid>
+            <Grid container direction="row" justify={"center"}>
+                <Grid className={classes.buttonBar} item lg={12} md={12} sm={12} xs={12}>
+                    {this.renderButtonBar()}
                 </Grid>
             </Grid>
 
@@ -44,4 +42,8 @@ class SearchBar extends Component {
     }
 }
 
-export default SearchBar;
+SearchBar.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(SearchBar);

@@ -1,6 +1,16 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField} from "@material-ui/core";
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Grid,
+    IconButton,
+    TextField,
+    Typography
+} from "@material-ui/core";
 import {withStyles} from "@material-ui/styles";
 import {Formik,} from 'formik';
 import * as Yup from 'yup';
@@ -8,6 +18,7 @@ import {ADD_POST} from "../../utils/Enpoints";
 import AxiosClient from "../../utils/AxiosClient";
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
+import {Close} from "@material-ui/icons";
 
 const styles = theme => ({
     root: {
@@ -60,7 +71,21 @@ class PostForm extends Component {
                     maxWidth={"md"}
                 >
                     <React.Fragment>
-                        <DialogTitle id="form-dialog-title">Share Your Story</DialogTitle>
+                        <DialogTitle id="form-dialog-title"
+                                     disableTypography
+                                     style={{
+                                         display: "flex",
+                                         justifyContent: "space-between",
+                                         alignItems: "center"
+                                     }}
+                        >
+                            <Typography variant={"h5"}>
+                                Share Your Story
+                            </Typography>
+                            <IconButton onClick={this.props.onHide}>
+                                <Close/>
+                            </IconButton>
+                        </DialogTitle>
                         <DialogContent>
                             <Formik
                                 initialValues={{title: '', tags: '', content: ''}}

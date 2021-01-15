@@ -28,6 +28,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final UserDetailsService jwtUserDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
+    private final String[] WHITELISTED_ENDPOINTS = new String[]{
+            "/user/login", "/user/signup",
+            "/posts/all", "/posts/preview/all", "/posts/id/",
+            "/posts/comments/get"
+    };
 
     public WebSecurityConfig(final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, final UserDetailsService jwtUserDetailsService, final JwtRequestFilter jwtRequestFilter) {
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
@@ -62,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/user/login", "/user/signup").permitAll().
+                .authorizeRequests().antMatchers(WHITELISTED_ENDPOINTS).permitAll().
                 // all other requests need to be authenticated
                         anyRequest().authenticated().and().
                 // make sure we use stateless session; session won't be used to

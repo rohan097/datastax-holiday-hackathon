@@ -6,6 +6,7 @@ import com.rohan.hackathon.datastax.backend.model.JwtRequest;
 import com.rohan.hackathon.datastax.backend.model.JwtResponse;
 import com.rohan.hackathon.datastax.backend.model.User;
 import com.rohan.hackathon.datastax.backend.service.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -50,5 +51,11 @@ public class UserController {
     @ExceptionHandler({LoginException.class})
     public ResponseEntity<String> handleLoginException(LoginException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+    
+    @ExceptionHandler({ExpiredJwtException.class})
+    public ResponseEntity<Object> handleExpiredJwtException(ExpiredJwtException e) {
+        logger.error("JWT token has expired: {}.", e.getMessage(), e);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token expired.");
     }
 }
