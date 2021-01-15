@@ -5,12 +5,12 @@ class SearchBar extends Component {
 
     constructor(props) {
         super(props);
-        this.addExperience = this.addExperience.bind(this);
+        this.addPost = this.addPost.bind(this);
     }
 
-    addExperience() {
-        console.log("Adding a new Experience.");
-        this.props.onAddExperience();
+    addPost() {
+        console.log("Adding a new post.");
+        this.props.onAddPost();
     }
 
     render() {
@@ -31,7 +31,7 @@ class SearchBar extends Component {
                         </Grid>
                         <Grid item lg={6}>
                             <IconButton onClick={() => {
-                                this.addExperience();
+                                this.addPost();
                             }}>
                                 <Icon>add</Icon>
                             </IconButton>

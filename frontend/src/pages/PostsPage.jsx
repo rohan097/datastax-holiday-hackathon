@@ -2,9 +2,9 @@ import {Component} from "react";
 import {
     Button,
     Card,
+    CardActionArea,
     CardActions,
     CardContent,
-    Chip,
     Container,
     Divider,
     Grid,
@@ -16,30 +16,29 @@ import PostForm from "../components/forms/PostForm";
 import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/styles";
 import AxiosClient from "../utils/AxiosClient";
-import {ALL_POSTS} from "../utils/Enpoints";
+import {PREVIEW_POSTS} from "../utils/Enpoints";
 
 const styles = theme => ({
     rootContainer: {
         paddingTop: 32
     },
-    tagContainer: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        margin: 0,
-    },
-    tag: {
-        margin: 6
-    },
     card: {
-        // display: 'flex',
         padding: 12
     },
-    cardContent: {
-        // spacing: 3
-    },
     cardAction: {
-        position: "relative",
-        bottom: 0
+        display: 'flex',
+        justifyContent: 'flex-start'
+    },
+    cardActionArea: {
+        display: 'flex',
+        flex: '1 0 auto',
+        alignItems: 'flex-end',
+        flexDirection: 'column'
+    },
+    rootCard: {
+        height: "100%",
+        display: 'flex',
+        flexDirection: 'column'
     }
 
 });
@@ -63,14 +62,12 @@ class PostsPage extends Component {
 
     getAllPosts() {
         AxiosClient
-            .get(ALL_POSTS)
+            .get(PREVIEW_POSTS)
             .then((response) => {
-                console.log("Got content: ");
-                console.log(response.data);
                 let items = response.data;
                 this.setState({
                     posts: items,
-                })
+                });
 
             })
     }
@@ -98,6 +95,7 @@ class PostsPage extends Component {
                     </Grid>
                     <PostForm
                         show={this.state.showForm}
+                        reload={this.getAllPosts}
                         onHide={() => {
                             this.setState({showForm: false})
                         }}
@@ -117,33 +115,23 @@ class PostsPage extends Component {
         const {classes} = this.props;
         return (
             <Grid item lg={4} md={6} sm={12} xs={12} className={classes.card}>
-                <Card variant={"outlined"}>
+                <Card className={classes.rootCard} variant={"outlined"}>
                     <CardContent className={classes.cardContent}>
                         <Typography variant="h5" component="h2" gutterBottom>
                             {data.title}
                         </Typography>
                         <Divider/>
                         <Typography variant="body2" component="p">
-                            {data.content}
+                            {data.content} ...
                         </Typography>
-                        <Grid container direction={"row"} className={classes.tagContainer}>
-                            {data.tags.split(",").map((tag) => {
-                                if (tag !== undefined && tag !== "") {
-                                    return (
-                                        <Chip
-                                            label={tag}
-                                            className={classes.tag}
-                                        />
-                                    );
-                                }
-                            })}
-                        </Grid>
                     </CardContent>
-                    <CardActions className={classes.cardAction}>
-                        <Button size="small" onClick={() => {
-                            this.goToPost(data.userId, data.postId)
-                        }}>Read More</Button>
-                    </CardActions>
+                    <CardActionArea className={classes.cardActionArea}>
+                        <CardActions className={classes.cardAction}>
+                            <Button size="small" onClick={() => {
+                                this.goToPost(data.userId, data.postId)
+                            }}>Read More</Button>
+                        </CardActions>
+                    </CardActionArea>
                 </Card>
             </Grid>
         );

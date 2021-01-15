@@ -30,6 +30,12 @@ public class ContentController {
         return ResponseEntity.ok(contentService.getAllPosts());
     }
 
+    @GetMapping("/preview/all")
+    public ResponseEntity<Object> previewAllPosts() {
+        logger.info("Received request to preview all posts.");
+        return ResponseEntity.ok(contentService.previewAllPosts());
+    }
+
     @GetMapping("/id/")
     public ResponseEntity<Object> getPostById(@RequestParam("userId") String userId, @RequestParam("postId") String postId) {
         logger.info("Received request to get post with USER ID = {} and POST ID = {}.", userId, postId);

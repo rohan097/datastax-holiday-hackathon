@@ -89,4 +89,16 @@ public class ContentService {
         return ImmutableMap.of("comments", roots);
     }
 
+    public List<Post> previewAllPosts() {
+        List<Post> items = contentRepository.getAll();
+        logger.info("Got {} items from DB.", items.size());
+        items
+                .forEach(post -> {
+                    if (post.getContent().length() > 250) {
+                        post.setContent(post.getContent().substring(0, 250));
+                    }
+                });
+
+        return items;
+    }
 }

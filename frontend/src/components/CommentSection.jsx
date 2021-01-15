@@ -34,7 +34,8 @@ class CommentSection extends Component {
             postId: this.props.postId,
             userId: this.props.userId
         }
-        // this.loadComments = this.loadComments.bind(this);
+        this.sendCommentToServer = this.sendCommentToServer.bind(this);
+        this.loadComments = this.loadComments.bind(this);
         this.renderTree = this.renderTree.bind(this);
     }
 
@@ -55,7 +56,7 @@ class CommentSection extends Component {
                 this.setState({
                     comments: response.data.comments,
                     commentIds: response.data.keys
-                })
+                });
             }).catch((error) => {
             console.log("Got an error.");
             console.log(error);
@@ -70,8 +71,8 @@ class CommentSection extends Component {
                 }
             })
             .then((response) => {
-                console.log("Successfully saved comment. Response is: ");
-                console.log(response);
+                console.log("Successfully saved comment.");
+                this.loadComments();
             })
             .catch((error) => {
                 console.log("Got an error.");

@@ -105,11 +105,12 @@ class Comment extends Component {
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                         <Formik
                             initialValues={{data: '', postId: this.props.postId, parentId: this.props.commentId}}
-                            onSubmit={(values, {setSubmitting, handleReset}) => {
+                            onSubmit={(values, {setSubmitting}) => {
                                 setSubmitting(true);
                                 console.log("Submitting comment: ")
                                 console.log(values.data);
                                 this.props.uploadComment(values, setSubmitting);
+                                this.onReplyButtonClick();
                             }}
                             validationSchema={Yup.object().shape({
                                 data: Yup.string()
