@@ -15,8 +15,7 @@ const styles = theme => ({
     paper: {
         height: "100%",
         padding: 32
-    },
-    divider: {}
+    }
 });
 
 

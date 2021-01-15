@@ -10,6 +10,8 @@ import {ADD_COMMENT, GET_COMMENT} from "../utils/Enpoints";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
 import AuthenticationService from "../services/AuthenticationService";
 import {withStyles} from "@material-ui/styles";
+import Alert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
 
 const styles = theme => ({
     rootContainer: {
@@ -23,7 +25,8 @@ const styles = theme => ({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        padding: 8
     }
 });
 
@@ -33,11 +36,14 @@ class CommentSection extends Component {
         super(props);
         this.state = {
             postId: this.props.postId,
-            userId: this.props.userId
+            userId: this.props.userId,
+            showToast: false
         }
         this.sendCommentToServer = this.sendCommentToServer.bind(this);
         this.loadComments = this.loadComments.bind(this);
         this.renderTree = this.renderTree.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+
     }
 
     componentDidMount() {
@@ -73,11 +79,21 @@ class CommentSection extends Component {
             })
             .then((response) => {
                 console.log("Successfully saved comment.");
+                this.setState({
+                    showToast: true,
+                    severity: "success",
+                    message: "Successfully saved comment."
+                });
                 this.loadComments();
             })
             .catch((error) => {
                 console.log("Got an error.");
                 console.log(error);
+                this.setState({
+                    showToast: true,
+                    severity: "error",
+                    message: "Unable to add comment."
+                });
             })
             .finally(() => {
                 setSubmitting(false);
@@ -100,6 +116,7 @@ class CommentSection extends Component {
                                              username={comment.username}
                                              content={comment.data}
                                              date={comment.date}
+                                             reload={this.loadComments}
                                              uploadComment={this.sendCommentToServer}
                                          />
                                      }>
@@ -140,6 +157,13 @@ class CommentSection extends Component {
                 </TreeView>
             );
         }
+    }
+
+    handleClose() {
+        this.setState({
+            showToast: false,
+            message: "",
+        });
     }
 
     render() {
@@ -223,6 +247,15 @@ class CommentSection extends Component {
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                         {this.renderComments()}
                     </Grid>
+                    <Snackbar
+                        open={this.state.showToast}
+                        autoHideDuration={5000}
+                        onClose={this.handleClose}
+                    >
+                        <Alert severity={this.state.severity} onClose={this.handleClose}>
+                            {this.state.message}
+                        </Alert>
+                    </Snackbar>
                 </Grid>
             );
         } else {

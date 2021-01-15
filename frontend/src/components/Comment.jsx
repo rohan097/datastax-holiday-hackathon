@@ -7,6 +7,8 @@ import AxiosClient from "../utils/AxiosClient";
 import {DELETE_COMMENT} from "../utils/Enpoints";
 import * as Yup from "yup";
 import {Formik} from "formik";
+import Alert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
 
 const styles = theme => ({
     rootContainer: {
@@ -25,7 +27,14 @@ const styles = theme => ({
         display: 'flex',
         justifyContent: 'flex-end'
     },
-    replyBar: {}
+    replyBar: {},
+    submitButton: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 8
+    }
 });
 
 class Comment extends Component {
@@ -37,10 +46,12 @@ class Comment extends Component {
             parentId: this.props.parent,
             username: this.props.username,
             content: this.props.content,
-            replyToParent: false
+            replyToParent: false,
+            showToast: false
         }
         this.onReplyButtonClick = this.onReplyButtonClick.bind(this);
         this.onDeleteButtonClick = this.onDeleteButtonClick.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
 
     onReplyButtonClick() {
@@ -61,11 +72,29 @@ class Comment extends Component {
             .then((response) => {
                 console.log("Deleted comment. Response = ");
                 console.log(response);
+                this.setState({
+                    showToast: true,
+                    severity: "success",
+                    message: "Successfully deleted comment."
+                });
+                this.props.reload();
             })
             .catch((error) => {
                 console.log("Error while deleting comment.");
                 console.log(error);
+                this.setState({
+                    showToast: true,
+                    severity: "error",
+                    errorMessage: error.response.data
+                });
             })
+    }
+
+    handleClose() {
+        this.setState({
+            showToast: false,
+            message: "",
+        });
     }
 
     render() {
@@ -143,7 +172,8 @@ class Comment extends Component {
                                                     fullWidth={true}
                                                 />
                                             </Grid>
-                                            <Grid item lg={2} md={2} sm={12} xs={12}>
+                                            <Grid className={classes.submitButton}
+                                                  item lg={2} md={2} sm={12} xs={12}>
                                                 <Button
                                                     variant={"outlined"}
                                                     type={"submit"}
@@ -160,7 +190,17 @@ class Comment extends Component {
                     </Grid>
                 </>
                 }
+                <Snackbar
+                    open={this.state.showToast}
+                    autoHideDuration={5000}
+                    onClose={this.handleClose}
+                >
+                    <Alert severity={this.state.severity} onClose={this.handleClose}>
+                        {this.state.message}
+                    </Alert>
+                </Snackbar>
             </Grid>
+
         );
     }
 

@@ -31,31 +31,20 @@ const styles = theme => ({
     },
 });
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
-
 class PostForm extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            showErrorMessage: false
+            showToast: false
         };
         this.handleClose = this.handleClose.bind(this);
     }
 
     handleClose() {
         this.setState({
-            showErrorMessage: false,
-            errorMessage: "",
+            showToast: false,
+            message: "",
         });
     }
 
@@ -104,15 +93,15 @@ class PostForm extends Component {
                                             console.log("Successfully submitted form.")
                                             setSubmitting(false);
                                             this.setState({
-                                                showErrorMessage: true,
+                                                showToast: true,
                                                 severity: "success",
-                                                errorMessage: "Successfully saved post."
+                                                message: "Successfully saved post."
                                             });
                                             this.props.reload();
                                         })
                                         .catch((error) => {
                                             this.setState({
-                                                showErrorMessage: true,
+                                                showToast: true,
                                                 severity: "error",
                                                 errorMessage: error.response.data
                                             });
@@ -196,12 +185,12 @@ class PostForm extends Component {
                     </React.Fragment>
                 </Dialog>
                 <Snackbar
-                    open={this.state.showErrorMessage}
+                    open={this.state.showToast}
                     autoHideDuration={5000}
                     onClose={this.handleClose}
                 >
                     <Alert severity={this.state.severity} onClose={this.handleClose}>
-                        {this.state.errorMessage}
+                        {this.state.message}
                     </Alert>
                 </Snackbar>
             </>

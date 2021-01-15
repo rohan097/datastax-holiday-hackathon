@@ -39,6 +39,9 @@ const styles = theme => ({
         height: "100%",
         display: 'flex',
         flexDirection: 'column'
+    },
+    gridContainer: {
+        padding: 16
     }
 
 });
@@ -85,7 +88,7 @@ class PostsPage extends Component {
         return (
             <Container className={classes.rootContainer} fixed={true}>
                 <Paper>
-                    <Grid container>
+                    <Grid className={classes.gridContainer} container>
                         <Grid item md={12} lg={12}>
                             <SearchBar
                                 onAddPost={this.onAddPost}
@@ -116,7 +119,7 @@ class PostsPage extends Component {
         return (
             <Grid item lg={4} md={6} sm={12} xs={12} className={classes.card}>
                 <Card className={classes.rootCard} variant={"outlined"}>
-                    <CardContent className={classes.cardContent}>
+                    <CardContent>
                         <Typography variant="h5" component="h2" gutterBottom>
                             {data.title}
                         </Typography>
