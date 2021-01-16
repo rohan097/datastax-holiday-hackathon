@@ -4,6 +4,8 @@ import * as React from "react";
 import {Component} from "react";
 import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/styles";
+import {HomeRoute, LoginRoute, SignUpRoute} from "../utils/Routes";
+import AuthenticationService from "../services/AuthenticationService";
 
 const styles = theme => ({
     list: {
@@ -60,6 +62,20 @@ class SideDrawer extends Component {
                             </ListItem>
                         </a>
                     ))}
+                    {AuthenticationService.isUserLoggedIn() &&
+                    <ListItem button component={"a"} href={HomeRoute.path}>
+                        <ListItemText primary={"LOGOUT"}/>
+                    </ListItem>
+                    }
+                    {!AuthenticationService.isUserLoggedIn() && <>
+                        <ListItem button component={"a"} href={LoginRoute.path}>
+                            <ListItemText primary={"LOGIN"}/>
+                        </ListItem>
+                        <ListItem button component={"a"} href={SignUpRoute.path}>
+                            <ListItemText primary={"SIGN UP"}/>
+                        </ListItem>
+                    </>
+                    }
                 </List>
             </div>);
     }
