@@ -5,10 +5,15 @@ import com.rohan.hackathon.datastax.backend.exception.EntityNotFoundException;
 import com.rohan.hackathon.datastax.backend.model.*;
 import com.rohan.hackathon.datastax.backend.repository.comment.CommentRepository;
 import com.rohan.hackathon.datastax.backend.repository.content.ContentRepository;
+import jnr.ffi.annotations.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -95,7 +100,7 @@ public class ContentService {
     }
 
     private Map<String, Object> createCommentResponse(List<Comment> comments) {
-        List<CommentsResponse> copy = comments.stream().map(CommentsResponse::new).collect(Collectors.toList());
+        List<CommentsResponse> copy = comments.stream().map(CommentsResponse::new).map(this::getDate).collect(Collectors.toList());
         List<CommentsResponse> roots = new ArrayList<>();
         Map<UUID, CommentsResponse> map = new HashMap<>();
         copy.forEach(commentsResponse -> map.put(commentsResponse.getCommentId(), commentsResponse));
@@ -109,6 +114,20 @@ public class ContentService {
             }
         }
         return ImmutableMap.of("comments", roots);
+    }
+
+    private CommentsResponse getDate(CommentsResponse commentsResponse) {
+        Instant createdAt = commentsResponse.getCreatedAt();
+        Instant currentInstant = Instant.now();
+        Duration timeDifference = Duration.between(createdAt, currentInstant);
+        if (timeDifference.toMinutes() < 60) {
+            commentsResponse.setDate("now");
+        } else if (timeDifference.toHours() < 24) {
+            commentsResponse.setDate(timeDifference.toHours() + "h");
+        } else {
+            commentsResponse.setDate(timeDifference.toDays() + "d");
+        }
+        return commentsResponse;
     }
 
     public List<PostsByYear> previewAllPosts(String year) {

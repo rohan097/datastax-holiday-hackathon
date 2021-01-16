@@ -2,7 +2,7 @@ import {Button, Divider, Grid, IconButton, TextField, Typography} from "@materia
 import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/styles";
 import React, {Component} from "react";
-import {ArrowDownward, ArrowUpward, Delete, Reply} from "@material-ui/icons";
+import {Delete, Reply} from "@material-ui/icons";
 import AxiosClient from "../utils/AxiosClient";
 import {DELETE_COMMENT} from "../utils/Enpoints";
 import * as Yup from "yup";
@@ -34,6 +34,10 @@ const styles = theme => ({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 8
+    },
+    divider: {
+        marginLeft: 8,
+        marginRight: 8
     }
 });
 
@@ -105,7 +109,7 @@ class Comment extends Component {
                     <Typography variant={"subtitle2"} component={"h6"}>
                         {this.props.username}
                     </Typography>
-                    <Divider orientation={"vertical"}/>
+                    <Divider className={classes.divider} orientation={"vertical"}/>
                     <Typography variant={"caption"} component={"h6"}>
                         {this.props.date}
                     </Typography>
@@ -121,12 +125,6 @@ class Comment extends Component {
                     </IconButton>
                     <IconButton onClick={this.onDeleteButtonClick} size={"small"}>
                         <Delete/>
-                    </IconButton>
-                    <IconButton size={"small"}>
-                        <ArrowUpward/>
-                    </IconButton>
-                    <IconButton size={"small"}>
-                        <ArrowDownward/>
                     </IconButton>
                 </Grid>
                 {this.state.replyToParent &&

@@ -5,7 +5,8 @@ import java.util.List;
 
 public class CommentsResponse extends Comment {
 
-    List<Comment> children;
+    private List<Comment> children;
+    private String date;
 
     public CommentsResponse(Comment comment) {
         super(comment);
@@ -18,5 +19,13 @@ public class CommentsResponse extends Comment {
 
     public void addChild(Comment child) {
         this.children.add(child);
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
