@@ -1,5 +1,7 @@
 // import {AUTHENTICATE, BASIC_AUTH, FORGOT_PASSWORD} from "../utils/Enpoints";
 
+import jwtDecode from "jwt-decode";
+
 export const USER_NAME_SESSION_ATTRIBUTE_NAME = "authenticatedUser";
 export const USER_TOKEN = "token";
 var myHour = new Date();
@@ -21,6 +23,15 @@ class AuthenticationService {
         localStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
         localStorage.removeItem(USER_TOKEN);
         localStorage.removeItem("name");
+    }
+
+    getLoggerInUser() {
+        let token = localStorage.getItem(USER_TOKEN);
+        token = token.replace("Bearer ", "");
+        let decodedToken = jwtDecode(token);
+        return decodedToken.profileName;
+
+
     }
 
     isUserLoggedIn() {

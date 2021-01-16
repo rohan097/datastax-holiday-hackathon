@@ -57,7 +57,7 @@ class SearchBar extends Component {
     renderOptions() {
         let years = this.props.years;
         return years.map(year => {
-            return <option value={year}>{year}</option>
+            return <option key={year} value={year}>{year}</option>
         })
     }
 

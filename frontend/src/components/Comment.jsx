@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import {Formik} from "formik";
 import Alert from "@material-ui/lab/Alert";
 import Snackbar from "@material-ui/core/Snackbar";
+import AuthenticationService from "../services/AuthenticationService";
 
 const styles = theme => ({
     rootContainer: {
@@ -114,14 +115,18 @@ class Comment extends Component {
                         {this.props.content}
                     </Typography>
                 </Grid>
-                <Grid className={classes.commentActionBar} item lg={12} md={12} sm={12} xs={12}>
+                {AuthenticationService.isUserLoggedIn() &&
+                <Grid className={classes.commentActionBar} item lg={12} md={12} sm={12} xs={12} hidden={true}>
                     <IconButton onClick={this.onReplyButtonClick} size={"small"}>
                         <Reply/>
                     </IconButton>
+                    {AuthenticationService.getLoggerInUser() === this.props.username &&
                     <IconButton onClick={this.onDeleteButtonClick} size={"small"}>
                         <Delete/>
                     </IconButton>
+                    }
                 </Grid>
+                }
                 {this.state.replyToParent &&
                 <>
                     <Grid item lg={12} md={12} sm={12} xs={12}>

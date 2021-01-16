@@ -119,27 +119,24 @@ class Header extends Component {
                                                 vertical: 'center',
                                                 horizontal: 'center'
                                             }}
-                                            // transformOrigin={{
-                                            //     vertical: 'center',
-                                            //     horizontal: 'left'
-                                            // }}
                                         >
                                             {/* TODO: Need to make this conditional*/}
                                             {!AuthenticationService.isUserLoggedIn() &&
                                             [
-                                                <MenuItem component={"a"} href={LoginRoute.path}
+                                                <MenuItem key={"loginButton"} component={"a"} href={LoginRoute.path}
                                                           onClick={this.handleCloseUserDropDown}>Login</MenuItem>,
-                                                <MenuItem component={"a"} href={SignUpRoute.path}
+                                                <MenuItem key={"signUpButton"} component={"a"} href={SignUpRoute.path}
                                                           onClick={this.handleCloseUserDropDown}>Sign Up</MenuItem>
                                             ]
 
                                             }
                                             {AuthenticationService.isUserLoggedIn() &&
                                             [
-                                                <MenuItem component={"a"} href={HomeRoute.path} onClick={(e) => {
-                                                    AuthenticationService.logout();
-                                                    this.handleCloseUserDropDown(e);
-                                                }}>Logout</MenuItem>
+                                                <MenuItem key={"logoutButton"} component={"a"} href={HomeRoute.path}
+                                                          onClick={(e) => {
+                                                              AuthenticationService.logout();
+                                                              this.handleCloseUserDropDown(e);
+                                                          }}>Logout</MenuItem>
                                             ]
                                             }
                                         </Menu>

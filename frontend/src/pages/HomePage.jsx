@@ -1,4 +1,4 @@
-import {Component} from "react";
+import React, {Component} from "react";
 import {Container, Divider, Grid, Paper, Typography} from "@material-ui/core";
 import fact1 from "../fact1.jpeg";
 import fact2 from "../fact2.jpeg";
@@ -40,7 +40,7 @@ class HomePage extends Component {
             <Container>
                 <Paper className={classes.paperContainer}>
                     <Grid container direction={"row"} spacing={3} alignItems={"center"}>
-                        <Grid item lg={12} alignItems={"center"}>
+                        <Grid item lg={12}>
                             <Typography variant={"h2"} align={"center"}>
                                 Did you know
                             </Typography>
@@ -61,18 +61,6 @@ class HomePage extends Component {
                             <Typography variant={"h4"} align={"center"}>
                                 So, what is this website for?
                             </Typography>
-                            {/*<Typography variant={"h6"}>*/}
-                            {/*    <Typewriter options={{*/}
-                            {/*        strings: ['So, what is this website for?',*/}
-                            {/*            'Well, this is a place for people to come together and share their experiences with on and another. ' +*/}
-                            {/*            'It\'s a place to know that you are not alone, and that other people too have gone through similar experiences as well.'],*/}
-                            {/*        autoStart: true,*/}
-                            {/*        loop: true,*/}
-                            {/*        delay: 30,*/}
-                            {/*        deleteSpeed: 20*/}
-                            {/*    }}*/}
-                            {/*    />*/}
-                            {/*</Typography>*/}
                             <Typography variant={"h6"} align={"justify"}>
                                 Well, this is a place for people to come together and share their experiences with on
                                 and another.

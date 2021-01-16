@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {
-    Button,
     Card,
     CardActionArea,
     CardActions,
@@ -114,7 +113,7 @@ class PostsPage extends Component {
     createCard(data) {
         const {classes} = this.props;
         return (
-            <Grid item lg={4} md={6} sm={12} xs={12} className={classes.card}>
+            <Grid key={data.title} item lg={4} md={6} sm={12} xs={12} className={classes.card}>
                 <Card className={classes.rootCard} variant={"outlined"}>
                     <CardContent>
                         <Typography variant="h5" component="h2" gutterBottom>
@@ -126,10 +125,12 @@ class PostsPage extends Component {
                         </Typography>
                     </CardContent>
                     <CardActionArea className={classes.cardActionArea}>
-                        <CardActions className={classes.cardAction}>
-                            <Button size="small" onClick={() => {
-                                this.goToPost(data.userId, data.postId)
-                            }}>Read More</Button>
+                        <CardActions className={classes.cardAction} onClick={() => {
+                            this.goToPost(data.userId, data.postId);
+                        }}>
+                            <Typography variant={"body1"}>
+                                Read More
+                            </Typography>
                         </CardActions>
                     </CardActionArea>
                 </Card>
