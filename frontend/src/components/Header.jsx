@@ -20,10 +20,17 @@ import SideDrawer from "./SideDrawer";
 import BackToTop from "./BackToTop";
 import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/styles";
-import {HomeRoute, LoginRoute, PostsRoute, ResourceRoute, SignUpRoute} from "../utils/Routes";
+import {HomeRoute, LoginRoute, PostsRoute, SignUpRoute} from "../utils/Routes";
 import AuthenticationService from "../services/AuthenticationService";
+import * as Theme from "../utils/Theme";
 
 const styles = theme => ({
+    appBar: {
+        background: Theme.DARK_PRIMARY_COLOR,
+    },
+    avatar: {
+        background: Theme.ACCENT_COLOR,
+    },
     navbarDisplayFlex: {
         display: `flex`,
         justifyContent: `space-between`
@@ -35,14 +42,14 @@ const styles = theme => ({
     linkText: {
         textDecoration: `none`,
         textTransform: `uppercase`,
-        color: `white`
-    }
+        color: Theme.TEXT_ICONS
+    },
+    logo: {}
 });
 
 const navLinks = [
     HomeRoute,
     PostsRoute,
-    ResourceRoute
 ];
 
 class Header extends Component {
@@ -75,7 +82,7 @@ class Header extends Component {
         return (
             <>
                 <HideOnScroll>
-                    <AppBar position="fixed">
+                    <AppBar className={classes.appBar} position="fixed">
                         <Toolbar component="nav">
                             <Container maxWidth="md" className={classes.navbarDisplayFlex}>
                                 <IconButton edge="start" aria-label="home">
@@ -97,7 +104,7 @@ class Header extends Component {
                                                 </ListItem>
                                             </a>
                                         ))}
-                                        <Avatar onClick={this.handleClick}>
+                                        <Avatar className={classes.avatar} onClick={this.handleClick}>
                                             <Person/>
                                         </Avatar>
                                         <Menu

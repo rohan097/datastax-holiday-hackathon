@@ -3,6 +3,7 @@ import {Button, CircularProgress, FormControl, Grid, Select, Typography} from "@
 import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/styles";
 import AuthenticationService from "../services/AuthenticationService";
+import * as Theme from "../utils/Theme";
 
 const styles = theme => ({
     buttonBar: {
@@ -22,6 +23,9 @@ const styles = theme => ({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 8
+    },
+    addButton: {
+        background: Theme.ACCENT_COLOR,
     }
 });
 
@@ -35,9 +39,10 @@ class SearchBar extends Component {
     }
 
     renderButtonBar() {
+        const {classes} = this.props;
         if (AuthenticationService.isUserLoggedIn()) {
             return (
-                <Button variant={"contained"} onClick={this.props.onAddPost}>
+                <Button className={classes.addButton} variant={"contained"} onClick={this.props.onAddPost}>
                     Add Your Story
                 </Button>
             );
@@ -62,7 +67,7 @@ class SearchBar extends Component {
         if (this.props.isReady) {
             return (
                 <Grid container direction="row">
-                    <Grid className={classes.titleBar} item lg={6} md={6} sm={6} xs={6}>
+                    <Grid className={classes.titleBar} item lg={6} md={6} sm={12} xs={12}>
                         <Typography className={classes.yearTitle} variant={"h5"}>
                             Posts from
                         </Typography>
@@ -80,7 +85,7 @@ class SearchBar extends Component {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid className={classes.buttonBar} item lg={6} md={6} sm={6} xs={6}>
+                    <Grid className={classes.buttonBar} item lg={6} md={6} sm={12} xs={12}>
                         {this.renderButtonBar()}
                     </Grid>
                 </Grid>
