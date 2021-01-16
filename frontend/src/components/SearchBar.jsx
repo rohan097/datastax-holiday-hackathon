@@ -1,5 +1,5 @@
 import {Component} from "react";
-import {Button, Grid, Typography} from "@material-ui/core";
+import {Button, CircularProgress, FormControl, Grid, Select, Typography} from "@material-ui/core";
 import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/styles";
 import AuthenticationService from "../services/AuthenticationService";
@@ -8,10 +8,31 @@ const styles = theme => ({
     buttonBar: {
         justifyContent: "center",
         display: 'flex'
+    },
+    formControl: {
+        // margin: theme.spacing(1),
+        minWidth: 120,
+    },
+    titleBar: {
+        display: 'flex',
+    },
+    yearTitle: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 8
     }
 });
 
 class SearchBar extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            years: []
+        }
+    }
 
     renderButtonBar() {
         if (AuthenticationService.isUserLoggedIn()) {
@@ -29,16 +50,45 @@ class SearchBar extends Component {
         }
     }
 
+    renderOptions() {
+        let years = this.props.years;
+        return years.map(year => {
+            return <option value={year}>{year}</option>
+        })
+    }
+
     render() {
         const {classes} = this.props;
-        return (
-            <Grid container direction="row" justify={"center"}>
-                <Grid className={classes.buttonBar} item lg={12} md={12} sm={12} xs={12}>
-                    {this.renderButtonBar()}
+        if (this.props.isReady) {
+            return (
+                <Grid container direction="row">
+                    <Grid className={classes.titleBar} item lg={6} md={6} sm={6} xs={6}>
+                        <Typography className={classes.yearTitle} variant={"h5"}>
+                            Posts from
+                        </Typography>
+                        <FormControl className={classes.yearTitle}>
+                            <Select
+                                native
+                                value={this.props.selectedYear}
+                                onChange={this.props.handleYearChange}
+                                inputProps={{
+                                    name: 'year',
+                                    id: 'year-native-simple',
+                                }}
+                            >
+                                {this.renderOptions()}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid className={classes.buttonBar} item lg={6} md={6} sm={6} xs={6}>
+                        {this.renderButtonBar()}
+                    </Grid>
                 </Grid>
-            </Grid>
 
-        );
+            );
+        } else {
+            return <CircularProgress/>
+        }
     }
 }
 

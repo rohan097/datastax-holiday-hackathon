@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtRequestFilter jwtRequestFilter;
     private final String[] WHITELISTED_ENDPOINTS = new String[]{
             "/user/login", "/user/signup",
-            "/posts/all", "/posts/preview/all", "/posts/id/",
+            "/posts/year", "/posts/all", "/posts/preview/all", "/posts/id/",
             "/posts/comments/get"
     };
 

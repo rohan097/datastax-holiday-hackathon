@@ -16,7 +16,7 @@ import PostForm from "../components/forms/PostForm";
 import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/styles";
 import AxiosClient from "../utils/AxiosClient";
-import {PREVIEW_POSTS} from "../utils/Enpoints";
+import {GET_YEARS, PREVIEW_POSTS} from "../utils/Enpoints";
 
 const styles = theme => ({
     rootContainer: {
@@ -52,11 +52,14 @@ class PostsPage extends Component {
         super(props);
         this.state = {
             showForm: false,
+            selectedYear: undefined,
             posts: []
         };
+        this.loadYears = this.loadYears.bind(this);
         this.onAddPost = this.onAddPost.bind(this);
         this.getAllPosts = this.getAllPosts.bind(this);
         this.goToPost = this.goToPost.bind(this);
+        this.handleYearChange = this.handleYearChange.bind(this);
     }
 
     onAddPost() {
@@ -65,7 +68,11 @@ class PostsPage extends Component {
 
     getAllPosts() {
         AxiosClient
-            .get(PREVIEW_POSTS)
+            .get(PREVIEW_POSTS, {
+                params: {
+                    year: this.state.selectedYear
+                }
+            })
             .then((response) => {
                 let items = response.data;
                 this.setState({
@@ -79,8 +86,29 @@ class PostsPage extends Component {
         this.props.history.push("/post/" + userId + "/" + postId);
     }
 
+    loadYears() {
+        AxiosClient
+            .get(GET_YEARS)
+            .then((response) => {
+                console.log("Loaded distinct years: ");
+                console.log(response);
+                this.setState({
+                    years: response.data,
+                    selectedYear: response.data[0]
+                }, () => {
+                    this.getAllPosts();
+                })
+            })
+    }
+
+    handleYearChange(event) {
+        this.setState({
+            selectedYear: event.target.value
+        })
+    }
+
     componentDidMount() {
-        this.getAllPosts();
+        this.loadYears();
     }
 
     render() {
@@ -91,6 +119,10 @@ class PostsPage extends Component {
                     <Grid className={classes.gridContainer} container>
                         <Grid item md={12} lg={12}>
                             <SearchBar
+                                isReady={this.state.years !== undefined}
+                                handleYearChange={this.handleYearChange}
+                                selectedYear={this.state.selectedYear}
+                                years={this.state.years}
                                 onAddPost={this.onAddPost}
                             />
                         </Grid>
@@ -98,7 +130,7 @@ class PostsPage extends Component {
                     </Grid>
                     <PostForm
                         show={this.state.showForm}
-                        reload={this.getAllPosts}
+                        reload={this.loadYears}
                         onHide={() => {
                             this.setState({showForm: false})
                         }}

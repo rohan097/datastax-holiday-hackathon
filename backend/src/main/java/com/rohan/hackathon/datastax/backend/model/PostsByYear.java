@@ -6,19 +6,21 @@ import com.datastax.oss.driver.api.mapper.annotations.Entity;
 import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@CqlName("POSTS_BY_USER")
-public class Post {
+@CqlName("POSTS_BY_YEAR")
+public class PostsByYear {
 
-    @PartitionKey
     private UUID userId;
-    @ClusteringColumn
     private UUID postId = UUID.randomUUID();
     private String title;
     private String content;
+    @ClusteringColumn
     private Instant createdAt = Instant.now();
+    @PartitionKey
+    private Integer year = LocalDate.now().getYear();
 
     public UUID getUserId() {
         return userId;
@@ -58,6 +60,14 @@ public class Post {
 
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
     }
 
     @Override

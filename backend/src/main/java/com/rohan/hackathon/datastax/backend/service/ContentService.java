@@ -2,10 +2,7 @@ package com.rohan.hackathon.datastax.backend.service;
 
 import com.google.common.collect.ImmutableMap;
 import com.rohan.hackathon.datastax.backend.exception.EntityNotFoundException;
-import com.rohan.hackathon.datastax.backend.model.Comment;
-import com.rohan.hackathon.datastax.backend.model.CommentsResponse;
-import com.rohan.hackathon.datastax.backend.model.JwtUserDetails;
-import com.rohan.hackathon.datastax.backend.model.Post;
+import com.rohan.hackathon.datastax.backend.model.*;
 import com.rohan.hackathon.datastax.backend.repository.comment.CommentRepository;
 import com.rohan.hackathon.datastax.backend.repository.content.ContentRepository;
 import org.slf4j.Logger;
@@ -28,18 +25,43 @@ public class ContentService {
         this.commentRepository = commentRepository;
     }
 
-    public void addPost(final Post post, final JwtUserDetails userDetails) {
-        post.setUserId(userDetails.getId());
-        if (contentRepository.save(post)) {
-            logger.info("Successfully saved post..");
-        }
+
+    public List<Integer> getDistinctYears() {
+        List<Integer> result = contentRepository.getDistinctYears();
+        result.sort(Collections.reverseOrder());
+        return result;
+//        return result.stream().map(PostsByYear::getYear).sorted(Collections.reverseOrder()).collect(Collectors.toList());
     }
 
-    public List<Post> getAllPosts() {
-        List<Post> items = contentRepository.getAll();
-        logger.info("Got {} items from DB.", items.size());
-        return items;
+    public Boolean addPost(final Post post, final JwtUserDetails userDetails) {
+        post.setUserId(userDetails.getId());
+        if (contentRepository.save(post)) {
+            logger.info("Successfully saved post to POSTS_BY_USER table.");
+            logger.info("Now saving post to POSTS_BY_YEAR table.");
+            if (contentRepository.save(createPostsByYearObject(post))) {
+                logger.info("Successfully saved post to POSTS_BY_YEAR table.");
+            } else {
+                // Rollback changes to POSTS_BY_USER table.
+                logger.error("Could not save post to POSTS_BY_YEAR table.");
+                logger.info("Rolling back insert to POSTS_BY_USER table.");
+                contentRepository.delete(post);
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
+
+    private PostsByYear createPostsByYearObject(Post post) {
+        PostsByYear postsByYear = new PostsByYear();
+        postsByYear.setContent(post.getContent());
+        postsByYear.setPostId(post.getPostId());
+        postsByYear.setUserId(post.getUserId());
+        postsByYear.setCreatedAt(post.getCreatedAt());
+        postsByYear.setTitle(post.getTitle());
+        return postsByYear;
+    }
+
 
     public Post getPostById(String userIdString, String postIdString) {
         UUID userId = UUID.fromString(userIdString);
@@ -89,8 +111,8 @@ public class ContentService {
         return ImmutableMap.of("comments", roots);
     }
 
-    public List<Post> previewAllPosts() {
-        List<Post> items = contentRepository.getAll();
+    public List<PostsByYear> previewAllPosts(String year) {
+        List<PostsByYear> items = contentRepository.getAllPostsByYear(Integer.valueOf(year));
         logger.info("Got {} items from DB.", items.size());
         items
                 .forEach(post -> {

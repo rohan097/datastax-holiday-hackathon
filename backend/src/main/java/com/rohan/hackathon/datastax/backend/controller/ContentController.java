@@ -24,16 +24,16 @@ public class ContentController {
         this.contentService = contentService;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<Object> getAllPosts() {
-        logger.info("Received request to get all posts.");
-        return ResponseEntity.ok(contentService.getAllPosts());
+    @GetMapping("/years")
+    public ResponseEntity<Object> getDistinctYears() {
+        logger.info("Received request to get distinct years.");
+        return ResponseEntity.ok(contentService.getDistinctYears());
     }
 
     @GetMapping("/preview/all")
-    public ResponseEntity<Object> previewAllPosts() {
+    public ResponseEntity<Object> previewAllPosts(@RequestParam("year") String year) {
         logger.info("Received request to preview all posts.");
-        return ResponseEntity.ok(contentService.previewAllPosts());
+        return ResponseEntity.ok(contentService.previewAllPosts(year));
     }
 
     @GetMapping("/id/")
@@ -51,8 +51,12 @@ public class ContentController {
     @PostMapping("/add")
     public ResponseEntity<Object> addPost(@RequestBody Post request, @AuthenticationPrincipal JwtUserDetails userDetails) {
         logger.info("Received request to add post: {} from user: {}.", request, userDetails);
-        contentService.addPost(request, userDetails);
-        return ResponseEntity.ok("okay");
+        Boolean isSaved = contentService.addPost(request, userDetails);
+        if (isSaved) {
+            return ResponseEntity.ok("SAVED");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("NOT SAVED");
+        }
     }
 
     @PostMapping("/comments/add")

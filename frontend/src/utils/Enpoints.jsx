@@ -2,6 +2,7 @@ const HOSTNAME = 'http://localhost:8080';
 
 export const SIGNUP = `${HOSTNAME}/user/signup`;
 export const LOGIN = `${HOSTNAME}/user/login`;
+export const GET_YEARS = `${HOSTNAME}/posts/years`;
 export const ADD_POST = `${HOSTNAME}/posts/add`;
 export const PREVIEW_POSTS = `${HOSTNAME}/posts/preview/all`;
 export const POST_BY_ID = `${HOSTNAME}/posts/id/`
