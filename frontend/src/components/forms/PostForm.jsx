@@ -80,17 +80,13 @@ class PostForm extends Component {
                                 initialValues={{title: '', tags: '', content: ''}}
                                 onSubmit={(values, {setSubmitting}) => {
                                     setSubmitting(true);
-                                    console.log("Submitting form.");
-                                    console.log(values);
                                     AxiosClient
                                         .post(ADD_POST, values, {
                                             headers: {
-                                                // "Access-Control-Allow-Origin": "*",
                                                 "Content-Type": "application/json",
                                             },
                                         })
                                         .then((response) => {
-                                            console.log("Successfully submitted form.")
                                             setSubmitting(false);
                                             this.setState({
                                                 showToast: true,

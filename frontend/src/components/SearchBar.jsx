@@ -1,4 +1,4 @@
-import {Component} from "react";
+import React, {Component} from "react";
 import {Button, CircularProgress, FormControl, Grid, Select, Typography} from "@material-ui/core";
 import PropTypes from "prop-types";
 import {withStyles} from "@material-ui/styles";
@@ -11,7 +11,6 @@ const styles = theme => ({
         display: 'flex'
     },
     formControl: {
-        // margin: theme.spacing(1),
         minWidth: 120,
     },
     titleBar: {

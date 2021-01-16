@@ -136,7 +136,6 @@ class Header extends Component {
                                             }
                                             {AuthenticationService.isUserLoggedIn() &&
                                             [
-                                                <MenuItem onClick={this.handleCloseUserDropDown}>My Profile</MenuItem>,
                                                 <MenuItem component={"a"} href={HomeRoute.path} onClick={(e) => {
                                                     AuthenticationService.logout();
                                                     this.handleCloseUserDropDown(e);

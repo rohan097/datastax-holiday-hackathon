@@ -43,8 +43,6 @@ class IndividualPostPage extends Component {
                 }
             })
             .then((response) => {
-                console.log("Got response for Post Id = " + this.state.postId);
-                console.log(response.data);
                 this.setState({
                     title: response.data.title,
                     content: response.data.content,

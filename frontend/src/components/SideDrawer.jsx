@@ -30,10 +30,6 @@ class SideDrawer extends Component {
     }
 
     toggleDrawer = (anchor, open) => event => {
-        console.log("Clicked on menu: ");
-        console.log(anchor);
-        console.log(open);
-        console.log(event);
         if (
             event.type === "keydown" &&
             (event.key === "Tab" || event.key === "Shift")

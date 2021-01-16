@@ -65,7 +65,6 @@ class Comment extends Component {
     }
 
     onDeleteButtonClick() {
-        console.log("Deleting comment with ID = " + this.props.commentId);
         AxiosClient
             .delete(DELETE_COMMENT, {
                 params: {
@@ -74,8 +73,6 @@ class Comment extends Component {
                 }
             })
             .then((response) => {
-                console.log("Deleted comment. Response = ");
-                console.log(response);
                 this.setState({
                     showToast: true,
                     severity: "success",
@@ -84,8 +81,6 @@ class Comment extends Component {
                 this.props.reload();
             })
             .catch((error) => {
-                console.log("Error while deleting comment.");
-                console.log(error);
                 this.setState({
                     showToast: true,
                     severity: "error",
@@ -134,8 +129,6 @@ class Comment extends Component {
                             initialValues={{data: '', postId: this.props.postId, parentId: this.props.commentId}}
                             onSubmit={(values, {setSubmitting}) => {
                                 setSubmitting(true);
-                                console.log("Submitting comment: ")
-                                console.log(values.data);
                                 this.props.uploadComment(values, setSubmitting);
                                 this.onReplyButtonClick();
                             }}

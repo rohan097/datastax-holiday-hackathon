@@ -58,16 +58,17 @@ class CommentSection extends Component {
                 }
             })
             .then((response) => {
-                console.log("Loaded all comments.");
-                console.log(response);
                 this.setState({
                     comments: response.data.comments,
                     commentIds: response.data.keys
                 });
             }).catch((error) => {
-            console.log("Got an error.");
-            console.log(error);
-        })
+            this.setState({
+                showToast: true,
+                severity: "error",
+                message: "Unable to load all comments."
+            });
+        });
     }
 
     sendCommentToServer(object, setSubmitting) {
@@ -78,7 +79,6 @@ class CommentSection extends Component {
                 }
             })
             .then((response) => {
-                console.log("Successfully saved comment.");
                 this.setState({
                     showToast: true,
                     severity: "success",
@@ -87,7 +87,6 @@ class CommentSection extends Component {
                 this.loadComments();
             })
             .catch((error) => {
-                console.log("Got an error.");
                 console.log(error);
                 this.setState({
                     showToast: true,
@@ -102,28 +101,21 @@ class CommentSection extends Component {
 
     renderTree(data) {
         if (data !== undefined) {
-            console.log("data = ");
-            console.log(data);
             let tree = data.map((comment) => {
-                console.log("Comment");
-                console.log(comment);
-                console.log(Array.isArray(comment.children) && comment.children.length !== 0);
-                let item = <TreeItem key={comment.commentId} nodeId={comment.commentId}
-                                     label={
-                                         <Comment
-                                             commentId={comment.commentId}
-                                             postId={comment.postId}
-                                             username={comment.username}
-                                             content={comment.data}
-                                             date={comment.date}
-                                             reload={this.loadComments}
-                                             uploadComment={this.sendCommentToServer}
-                                         />
-                                     }>
+                return <TreeItem key={comment.commentId} nodeId={comment.commentId}
+                                 label={
+                                     <Comment
+                                         commentId={comment.commentId}
+                                         postId={comment.postId}
+                                         username={comment.username}
+                                         content={comment.data}
+                                         date={comment.date}
+                                         reload={this.loadComments}
+                                         uploadComment={this.sendCommentToServer}
+                                     />
+                                 }>
                     {Array.isArray(comment.children) && comment.children.length !== 0 ? comment.children.map((node) => this.renderTree([node])) : null}
-                </TreeItem>
-                return item;
-
+                </TreeItem>;
             });
             return (
                 tree
@@ -184,10 +176,8 @@ class CommentSection extends Component {
                         <Grid item lg={12} md={12} sm={12} xs={12}>
                             <Formik
                                 initialValues={{data: '', postId: this.props.postId}}
-                                onSubmit={(values, {setSubmitting, handleReset}) => {
+                                onSubmit={(values, {setSubmitting}) => {
                                     setSubmitting(true);
-                                    console.log("Submitting comment: ")
-                                    console.log(values.data);
                                     this.sendCommentToServer(values, setSubmitting);
                                 }}
                                 validationSchema={Yup.object().shape({

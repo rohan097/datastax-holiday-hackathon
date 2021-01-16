@@ -52,17 +52,13 @@ class LoginPage extends Component {
                         initialValues={{email: '', password: ''}}
                         onSubmit={(values, {setSubmitting}) => {
                             setSubmitting(true);
-                            console.log("Submitting form to signup with values = ");
-                            console.log(values);
                             axios
                                 .post(LOGIN, values, {
                                     headers: {
-                                        // "Access-Control-Allow-Origin": "*",
                                         "Content-Type": "application/json",
                                     },
                                 })
                                 .then((response) => {
-                                    console.log("Successfully logged in.")
                                     setSubmitting(false);
                                     AuthenticationService.registerSuccessfulLoginForJwt(values.email, response.data.token);
                                     this.props.history.push(HomeRoute.path);

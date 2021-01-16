@@ -1,24 +1,11 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {
-    Button,
-    Container,
-    FormControl,
-    FormControlLabel,
-    FormHelperText,
-    FormLabel,
-    Grid,
-    Radio,
-    RadioGroup,
-    TextField,
-    Typography
-} from "@material-ui/core";
+import {Button, Container, Grid, TextField, Typography} from "@material-ui/core";
 import {withStyles} from "@material-ui/styles";
 import {Formik,} from 'formik';
 import * as Yup from 'yup';
 import axios from "axios";
 import Alert from "@material-ui/lab/Alert";
-import {AlertTitle} from "@material-ui/lab";
 import Snackbar from "@material-ui/core/Snackbar";
 import {SIGNUP} from "../utils/Enpoints";
 
@@ -34,6 +21,9 @@ class SignUpPage extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            showToast: false
+        }
     }
 
 
@@ -51,24 +41,26 @@ class SignUpPage extends Component {
                         initialValues={{email: '', profileName: '', password: '', gender: ''}}
                         onSubmit={(values, {setSubmitting}) => {
                             setSubmitting(true);
-                            console.log("Submitting form to signup with values = ");
-                            console.log(values);
                             axios
                                 .post(SIGNUP, values, {
                                     headers: {
-                                        // "Access-Control-Allow-Origin": "*",
                                         "Content-Type": "application/json",
                                     },
                                 })
                                 .then((response) => {
-                                    console.log("Response = ");
-                                    console.log(response);
-                                    console.log("Submission done.");
+                                    this.setState({
+                                        showToast: true,
+                                        severity: "success",
+                                        message: "Successfully created an account."
+                                    });
                                     setSubmitting(false);
                                 })
                                 .catch((error) => {
-                                    console.log(error);
-                                    console.log(error.config);
+                                    this.setState({
+                                        showToast: true,
+                                        severity: "error",
+                                        errorMessage: error.response.data
+                                    });
                                 })
                                 .finally(() => {
                                     setSubmitting(false);
@@ -97,7 +89,6 @@ class SignUpPage extends Component {
                                 handleBlur,
                                 handleSubmit,
                                 handleReset,
-                                setFieldValue,
                             } = props;
                             return (
                                 <form onSubmit={handleSubmit}>
@@ -142,39 +133,6 @@ class SignUpPage extends Component {
                                         />
                                     </Grid>
                                     <Grid item lg={12} md={12} sm={12} xs={12}>
-                                        <FormControl
-                                            component="fieldset"
-                                            error={errors.gender && touched.gender}
-                                        >
-                                            <FormLabel component="legend">Gender</FormLabel>
-                                            <RadioGroup
-                                                row
-                                                aria-label="Gender"
-                                                name="gender"
-                                                value={values.gender}
-                                                onChange={(event) => {
-                                                    setFieldValue("gender", event.target.value);
-                                                }}
-                                            >
-                                                <FormControlLabel
-                                                    value="male"
-                                                    control={<Radio/>}
-                                                    label="Male"
-                                                />
-                                                <FormControlLabel
-                                                    value="female"
-                                                    control={<Radio/>}
-                                                    label="Female"
-                                                />
-                                            </RadioGroup>
-                                            <FormHelperText>
-                                                {errors.gender &&
-                                                touched.gender &&
-                                                errors.gender}
-                                            </FormHelperText>
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item lg={12} md={12} sm={12} xs={12}>
                                         <Button
                                             type="button"
                                             className="outline"
@@ -192,10 +150,13 @@ class SignUpPage extends Component {
                         }}
                     </Formik>
                 </Grid>
-                <Snackbar open={true}>
-                    <Alert severity="error" hidden={true}>
-                        <AlertTitle>Error</AlertTitle>
-                        This is an error alert — <strong>check it out!</strong>
+                <Snackbar
+                    open={this.state.showToast}
+                    autoHideDuration={5000}
+                    onClose={this.handleClose}
+                >
+                    <Alert severity={this.state.severity} onClose={this.handleClose}>
+                        {this.state.message}
                     </Alert>
                 </Snackbar>
             </Container>

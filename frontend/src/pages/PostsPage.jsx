@@ -1,4 +1,4 @@
-import {Component} from "react";
+import React, {Component} from "react";
 import {
     Button,
     Card,
@@ -90,8 +90,6 @@ class PostsPage extends Component {
         AxiosClient
             .get(GET_YEARS)
             .then((response) => {
-                console.log("Loaded distinct years: ");
-                console.log(response);
                 this.setState({
                     years: response.data,
                     selectedYear: response.data[0]
@@ -105,6 +103,38 @@ class PostsPage extends Component {
         this.setState({
             selectedYear: event.target.value
         })
+    }
+
+    renderPosts() {
+        return this.state.posts.map((data) => {
+            return this.createCard(data);
+        });
+    }
+
+    createCard(data) {
+        const {classes} = this.props;
+        return (
+            <Grid item lg={4} md={6} sm={12} xs={12} className={classes.card}>
+                <Card className={classes.rootCard} variant={"outlined"}>
+                    <CardContent>
+                        <Typography variant="h5" component="h2" gutterBottom>
+                            {data.title}
+                        </Typography>
+                        <Divider/>
+                        <Typography variant="body2" component="p">
+                            {data.content} ...
+                        </Typography>
+                    </CardContent>
+                    <CardActionArea className={classes.cardActionArea}>
+                        <CardActions className={classes.cardAction}>
+                            <Button size="small" onClick={() => {
+                                this.goToPost(data.userId, data.postId)
+                            }}>Read More</Button>
+                        </CardActions>
+                    </CardActionArea>
+                </Card>
+            </Grid>
+        );
     }
 
     componentDidMount() {
@@ -137,38 +167,6 @@ class PostsPage extends Component {
                     />
                 </Paper>
             </Container>
-        );
-    }
-
-    renderPosts() {
-        return this.state.posts.map((data) => {
-            return this.createCard(data);
-        });
-    }
-
-    createCard(data) {
-        const {classes} = this.props;
-        return (
-            <Grid item lg={4} md={6} sm={12} xs={12} className={classes.card}>
-                <Card className={classes.rootCard} variant={"outlined"}>
-                    <CardContent>
-                        <Typography variant="h5" component="h2" gutterBottom>
-                            {data.title}
-                        </Typography>
-                        <Divider/>
-                        <Typography variant="body2" component="p">
-                            {data.content} ...
-                        </Typography>
-                    </CardContent>
-                    <CardActionArea className={classes.cardActionArea}>
-                        <CardActions className={classes.cardAction}>
-                            <Button size="small" onClick={() => {
-                                this.goToPost(data.userId, data.postId)
-                            }}>Read More</Button>
-                        </CardActions>
-                    </CardActionArea>
-                </Card>
-            </Grid>
         );
     }
 }
