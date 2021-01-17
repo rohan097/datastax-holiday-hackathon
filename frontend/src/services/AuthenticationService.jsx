@@ -27,9 +27,13 @@ class AuthenticationService {
 
     getLoggerInUser() {
         let token = localStorage.getItem(USER_TOKEN);
-        token = token.replace("Bearer ", "");
-        let decodedToken = jwtDecode(token);
-        return decodedToken.sub;
+        if (token === null || token === undefined) {
+            return "";
+        } else {
+            token = token.replace("Bearer ", "");
+            let decodedToken = jwtDecode(token);
+            return decodedToken.sub;
+        }
 
 
     }
