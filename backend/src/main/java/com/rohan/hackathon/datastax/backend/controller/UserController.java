@@ -2,6 +2,7 @@ package com.rohan.hackathon.datastax.backend.controller;
 
 import com.rohan.hackathon.datastax.backend.exception.AuthenticationException;
 import com.rohan.hackathon.datastax.backend.exception.LoginException;
+import com.rohan.hackathon.datastax.backend.exception.SignUpException;
 import com.rohan.hackathon.datastax.backend.model.JwtRequest;
 import com.rohan.hackathon.datastax.backend.model.JwtResponse;
 import com.rohan.hackathon.datastax.backend.model.User;
@@ -29,11 +30,8 @@ public class UserController {
     @PostMapping(value = "/signup")
     public ResponseEntity<Object> createUser(@RequestBody User user) {
         logger.info("Received request to signup user: {}", user);
-        if (userService.createNewUser(user)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        userService.createNewUser(user);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = "/login")
@@ -52,7 +50,12 @@ public class UserController {
     public ResponseEntity<String> handleLoginException(LoginException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
-    
+
+    @ExceptionHandler({SignUpException.class})
+    public ResponseEntity<String> handleSignUpException(SignUpException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
     @ExceptionHandler({ExpiredJwtException.class})
     public ResponseEntity<Object> handleExpiredJwtException(ExpiredJwtException e) {
         logger.error("JWT token has expired: {}.", e.getMessage(), e);

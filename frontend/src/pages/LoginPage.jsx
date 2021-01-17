@@ -49,7 +49,7 @@ class LoginPage extends Component {
                         </Typography>
                     </Grid>
                     <Formik
-                        initialValues={{email: '', password: ''}}
+                        initialValues={{profileName: '', password: ''}}
                         onSubmit={(values, {setSubmitting}) => {
                             setSubmitting(true);
                             axios
@@ -60,7 +60,7 @@ class LoginPage extends Component {
                                 })
                                 .then((response) => {
                                     setSubmitting(false);
-                                    AuthenticationService.registerSuccessfulLoginForJwt(values.email, response.data.token);
+                                    AuthenticationService.registerSuccessfulLoginForJwt(values.profileName, response.data.token);
                                     this.props.history.push(HomeRoute.path);
                                 })
                                 .catch((error) => {
@@ -74,8 +74,7 @@ class LoginPage extends Component {
                                 });
                         }}
                         validationSchema={Yup.object().shape({
-                            email: Yup.string()
-                                .email()
+                            profileName: Yup.string()
                                 .required('This cannot be blank.'),
                             password: Yup.string()
                                 .required('You must give a password.')
@@ -97,13 +96,13 @@ class LoginPage extends Component {
                                 <form onSubmit={handleSubmit}>
                                     <Grid item lg={12} md={12} sm={12} xs={12}>
                                         <TextField
-                                            label="Email"
-                                            name="email"
-                                            value={values.email}
+                                            label="Profile Name"
+                                            name="profileName"
+                                            value={values.profileName}
                                             onChange={handleChange}
                                             onBlur={handleBlur}
-                                            helperText={(errors.email && touched.email) && errors.email}
-                                            error={errors.email && touched.email}
+                                            helperText={(errors.profileName && touched.profileName) && errors.profileName}
+                                            error={errors.profileName && touched.profileName}
                                             margin="normal"
                                             variant={"outlined"}
                                         />

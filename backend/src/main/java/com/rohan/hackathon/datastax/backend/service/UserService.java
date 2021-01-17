@@ -2,9 +2,11 @@ package com.rohan.hackathon.datastax.backend.service;
 
 import com.rohan.hackathon.datastax.backend.exception.AuthenticationException;
 import com.rohan.hackathon.datastax.backend.exception.LoginException;
+import com.rohan.hackathon.datastax.backend.exception.SignUpException;
 import com.rohan.hackathon.datastax.backend.model.JwtRequest;
 import com.rohan.hackathon.datastax.backend.model.JwtUserDetails;
 import com.rohan.hackathon.datastax.backend.model.User;
+import com.rohan.hackathon.datastax.backend.model.UsersByProfile;
 import com.rohan.hackathon.datastax.backend.repository.user.UserRepository;
 import com.rohan.hackathon.datastax.backend.util.JwtTokenUtil;
 import org.slf4j.Logger;
@@ -35,10 +37,10 @@ public class UserService {
     }
 
     public String login(JwtRequest authenticationRequest) {
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        authenticate(authenticationRequest.getProfileName(), authenticationRequest.getPassword());
 
         final JwtUserDetails userDetails = (JwtUserDetails) jwtUserDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
+                .loadUserByUsername(authenticationRequest.getProfileName());
         logger.info("Found user = {}.", userDetails);
         return jwtTokenUtil.generateToken(userDetails);
     }
@@ -55,18 +57,59 @@ public class UserService {
         }
     }
 
-    public boolean createNewUser(User user) {
-        if (doesUserExist(user.getEmail())) {
-            logger.info("User with email = {} already exists.", user.getEmail());
-            return false;
+    public void createNewUser(User user) {
+        if (doesUserExist(user.getProfileName())) {
+            logger.info("User with profile name = {} already exists.", user.getProfileName());
+            throw new SignUpException("User already exists with Profile Name = " + user.getProfileName() + ".");
         } else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return userRepository.save(user);
+            if (!saveUser(user)) {
+                throw new SignUpException("Could not save user.");
+            }
         }
     }
 
-    private boolean doesUserExist(String email) {
-        User user = userRepository.findByEmail(email);
+    private Boolean saveUser(User user) {
+        if (saveUserInUserTable(user)) {
+            if (saveUserInUserByProfileTable(user)) {
+                logger.info("Successfully saved User in both tables.");
+                return true;
+            } else {
+                logger.info("Rolling back change to USERS table by deleting user: {}.", user);
+                userRepository.delete(user);
+            }
+        }
+        return false;
+    }
+
+    private Boolean saveUserInUserTable(User user) {
+        logger.info("Saving User is USERS table.");
+        Boolean isSaved = false;
+        try {
+            isSaved = userRepository.save(user);
+        } catch (Exception e) {
+            logger.error("An exception occurred while saving User to USERS table: {}", e.getMessage(), e);
+            throw new SignUpException(e.getMessage(), e);
+        }
+        return isSaved;
+    }
+
+    private Boolean saveUserInUserByProfileTable(User user) {
+        logger.info("Saving User is USERS_BY_PROFILE table.");
+        UsersByProfile usersByProfile = new UsersByProfile(user);
+        Boolean isSaved = false;
+        try {
+            isSaved = userRepository.save(usersByProfile);
+        } catch (Exception e) {
+            logger.error("An exception occurred while saving User to USERS_BY_PROFILE table: {}", e.getMessage(), e);
+            throw new SignUpException(e.getMessage(), e);
+        }
+        return isSaved;
+    }
+
+
+    private boolean doesUserExist(String profileName) {
+        UsersByProfile user = userRepository.findByProfile(profileName);
         return user != null;
     }
 }

@@ -5,15 +5,12 @@ import com.rohan.hackathon.datastax.backend.exception.EntityNotFoundException;
 import com.rohan.hackathon.datastax.backend.model.*;
 import com.rohan.hackathon.datastax.backend.repository.comment.CommentRepository;
 import com.rohan.hackathon.datastax.backend.repository.content.ContentRepository;
-import jnr.ffi.annotations.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,7 +32,6 @@ public class ContentService {
         List<Integer> result = contentRepository.getDistinctYears();
         result.sort(Collections.reverseOrder());
         return result;
-//        return result.stream().map(PostsByYear::getYear).sorted(Collections.reverseOrder()).collect(Collectors.toList());
     }
 
     public Boolean addPost(final Post post, final JwtUserDetails userDetails) {
@@ -81,7 +77,7 @@ public class ContentService {
 
     public void addComment(final Comment comment, final JwtUserDetails jwtUserDetails) {
         comment.setUserId(jwtUserDetails.getId());
-        comment.setUsername(jwtUserDetails.getProfileName());
+        comment.setUsername(jwtUserDetails.getUsername());
         if (commentRepository.save(comment)) {
             logger.info("Successfully saved comment.");
         }

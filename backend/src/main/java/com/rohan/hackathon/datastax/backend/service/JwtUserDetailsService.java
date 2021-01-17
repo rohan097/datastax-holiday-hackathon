@@ -1,7 +1,7 @@
 package com.rohan.hackathon.datastax.backend.service;
 
 import com.rohan.hackathon.datastax.backend.model.JwtUserDetails;
-import com.rohan.hackathon.datastax.backend.model.User;
+import com.rohan.hackathon.datastax.backend.model.UsersByProfile;
 import com.rohan.hackathon.datastax.backend.repository.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,11 +20,11 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public JwtUserDetails loadUserByUsername(String username) {
-        User user = userRepository.findByEmail(username);
+        UsersByProfile user = userRepository.findByProfile(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
-        return new JwtUserDetails(user.getUserId(), user.getEmail(), user.getProfileName(), user.getPassword());
+        return new JwtUserDetails(user.getUserId(), user.getProfileName(), user.getPassword());
     }
 
 //    public UserDetailEntity updateUser(String username, String password) {

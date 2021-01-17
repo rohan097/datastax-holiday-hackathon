@@ -29,7 +29,7 @@ class AuthenticationService {
         let token = localStorage.getItem(USER_TOKEN);
         token = token.replace("Bearer ", "");
         let decodedToken = jwtDecode(token);
-        return decodedToken.profileName;
+        return decodedToken.sub;
 
 
     }

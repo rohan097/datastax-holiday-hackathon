@@ -99,7 +99,7 @@ class PostForm extends Component {
                                             this.setState({
                                                 showToast: true,
                                                 severity: "error",
-                                                errorMessage: error.response.data
+                                                message: error.response.data
                                             });
                                         })
                                         .finally(() => {

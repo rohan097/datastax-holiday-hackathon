@@ -19,8 +19,6 @@ public class Comment {
     private UUID parentId;
     private String data;
     private String username;
-    private Integer upvotes;
-    private Integer downvotes;
 
     private Instant createdAt = Instant.now();
 
@@ -32,8 +30,6 @@ public class Comment {
         this.data = comment.getData();
         this.createdAt = comment.getCreatedAt();
         this.username = comment.getUsername();
-        this.upvotes = comment.upvotes;
-        this.downvotes = comment.downvotes;
     }
 
     public Comment() {
@@ -93,22 +89,6 @@ public class Comment {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public Integer getUpvotes() {
-        return upvotes;
-    }
-
-    public void setUpvotes(Integer upvotes) {
-        this.upvotes = upvotes;
-    }
-
-    public Integer getDownvotes() {
-        return downvotes;
-    }
-
-    public void setDownvotes(Integer downvotes) {
-        this.downvotes = downvotes;
     }
 
     @Override

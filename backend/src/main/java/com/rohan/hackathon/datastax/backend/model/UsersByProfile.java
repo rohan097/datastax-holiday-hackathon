@@ -2,26 +2,37 @@ package com.rohan.hackathon.datastax.backend.model;
 
 import com.datastax.oss.driver.api.mapper.annotations.CqlName;
 import com.datastax.oss.driver.api.mapper.annotations.Entity;
-import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 
 import java.time.Instant;
 import java.util.UUID;
 
 /*
- * This entity class is for future use when I need to search for a given
- * EMAIL ID and PROFILE NAME combination.
+ * This entity class is paritioned on profile name so that
+ * I can search by profile name and ensure that only one user
+ * exists with any given profile name.
  * */
 @Entity
-@CqlName("users")
-public class User {
+@CqlName("USERS_BY_PROFILE")
+public class UsersByProfile {
 
     private UUID userId = UUID.randomUUID();
-    @PartitionKey(0)
     private String email;
-    @PartitionKey(1)
+    @PrimaryKey
     private String profileName;
     private String password;
     private Instant createdAt = Instant.now();
+
+    public UsersByProfile() {
+    }
+
+    public UsersByProfile(User user) {
+        this.userId = user.getUserId();
+        this.profileName = user.getProfileName();
+        this.password = user.getPassword();
+        this.email = user.getEmail();
+        this.createdAt = user.getCreatedAt();
+    }
 
     public UUID getUserId() {
         return userId;
@@ -63,12 +74,14 @@ public class User {
         this.createdAt = createdAt;
     }
 
+
     @Override
     public String toString() {
         return "User{" +
                 "userId=" + userId +
                 ", email='" + email + '\'' +
                 ", profileName='" + profileName + '\'' +
+                ", password='" + password + '\'' +
                 ", createdAt=" + createdAt +
                 '}';
     }

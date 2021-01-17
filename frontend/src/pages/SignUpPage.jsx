@@ -38,7 +38,7 @@ class SignUpPage extends Component {
                         </Typography>
                     </Grid>
                     <Formik
-                        initialValues={{email: '', profileName: '', password: '', gender: ''}}
+                        initialValues={{email: '', profileName: '', password: '', }}
                         onSubmit={(values, {setSubmitting}) => {
                             setSubmitting(true);
                             axios
@@ -56,10 +56,11 @@ class SignUpPage extends Component {
                                     setSubmitting(false);
                                 })
                                 .catch((error) => {
+                                    console.log(error.response);
                                     this.setState({
                                         showToast: true,
                                         severity: "error",
-                                        errorMessage: error.response.data
+                                        message: error.response.data
                                     });
                                 })
                                 .finally(() => {
@@ -74,8 +75,6 @@ class SignUpPage extends Component {
                                 .required('This cannot be blank.'),
                             password: Yup.string()
                                 .required('You must give a password.'),
-                            gender: Yup.string()
-                                .required('Please select an option.')
                         })}
                     >
                         {(props) => {

@@ -9,6 +9,11 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 
+/*
+ * This entity complements the Post entity. This is user
+ * for sorting by date, so that the most recent posts for a
+ * given year can be displayed in the UI.
+ * */
 @Entity
 @CqlName("POSTS_BY_YEAR")
 public class PostsByYear {

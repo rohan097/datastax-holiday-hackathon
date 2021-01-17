@@ -8,6 +8,10 @@ import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
 import java.time.Instant;
 import java.util.UUID;
 
+/*
+ * This entity is used to identity a single post
+ * by its USER ID and POST ID.
+ * */
 @Entity
 @CqlName("POSTS_BY_USER")
 public class Post {
