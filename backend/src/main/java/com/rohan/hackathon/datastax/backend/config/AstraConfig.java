@@ -16,11 +16,14 @@ public class AstraConfig {
     @Value("${ASTRA_PWD}")
     private String pwd;
 
+    @Value("${APP_HOME}")
+    private String appHome;
+
 
     @Bean
     public CqlSession cqlSession() {
         return CqlSession.builder()
-                .withCloudSecureConnectBundle(Paths.get("src/main/resources/", "datastax-connect.zip"))
+                .withCloudSecureConnectBundle(Paths.get(appHome, "config", "datastax-connect.zip"))
                 .withAuthCredentials(userName, pwd)
                 .withKeyspace("application")
                 .build();
