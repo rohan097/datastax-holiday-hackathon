@@ -62,9 +62,10 @@ class HomePage extends Component {
                                 So, what is this website for?
                             </Typography>
                             <Typography variant={"h6"} align={"justify"}>
-                                Well, this is a place for people to come together and share their experiences with on
+                                Well, this is a place for people to come together and share their experiences with one
                                 and another.
                                 It's a place to know that you are not alone, and that other people too have gone through
+                                similar
                                 experiences as well.
                             </Typography>
                         </Grid>
